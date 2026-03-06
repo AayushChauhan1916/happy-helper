@@ -44,7 +44,7 @@ const baseQueryWithReauth: BaseQueryFn<
       result = await rawBaseQuery(args, api, extraOptions);
     } else {
       localStorage.removeItem('accessToken');
-      window.location.href = '/login';
+      window.location.href = '/login?reason=session-expired';
     }
   }
 

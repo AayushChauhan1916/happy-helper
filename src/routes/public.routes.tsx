@@ -4,11 +4,11 @@ import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 
-export const publicRoutes: RouteObject = {
-  element: <PublicLayout />,
-  children: [
-    { path: '/', element: <Home /> },
-    { path: '/login', element: <Login /> },
-    { path: '/register', element: <Register /> },
-  ],
-};
+export const publicRoutes: RouteObject[] = [
+  {
+    element: <PublicLayout />,
+    children: [{ index: true, element: <Home /> }],
+  },
+  { path: 'login', element: <Login /> },
+  { path: 'register', element: <Register /> },
+];

@@ -8,6 +8,6 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    children: [publicRoutes, ownerRoutes, adminRoutes],
+    children: [...publicRoutes, ownerRoutes, adminRoutes],
   },
 ]);

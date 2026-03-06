@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Link } from 'react-router-dom';
+
 import {
   Building2,
   Mail,
@@ -7,13 +10,13 @@ import {
   Key,
   Users,
   ArrowRight,
+  AlertTriangle,
 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+
 import {
   Form,
   FormControl,
@@ -22,55 +25,40 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useGoogleLogin } from '@react-oauth/google';
-import {
-  useGoogleLoginMutation,
-  UserRole,
-} from '@/redux/features/auth/auth.api';
+
 import { loginSchema, type LoginForm } from '@/schemas/login.schema';
-import { zodResolver } from '@hookform/resolvers/zod';
 
-const Login = () => {
-  // const navigate = useNavigate();
+import { UserRole } from '@/redux/features/auth/auth.api';
 
-  const [googleAuth, { isLoading }] = useGoogleLoginMutation();
+type Props = {
+  role: UserRole;
+  setRole: (role: UserRole) => void;
+  onSubmit: (data: LoginForm) => void;
+  onGoogleLogin: () => void;
+  isGoogleLoading: boolean;
+  sessionExpired?: boolean;
+};
 
-  const [role, setRole] = useState<UserRole>(UserRole.TENANT);
-
+const Login = ({
+  role,
+  setRole,
+  onSubmit,
+  onGoogleLogin,
+  isGoogleLoading,
+  sessionExpired,
+}: Props) => {
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: '', password: '' },
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
 
   const isTenant = role === UserRole.TENANT;
 
-  const onSubmit = (data: LoginForm) => {
-    console.log('Email login:', { ...data, role });
-  };
-
-  const googleLogin = useGoogleLogin({
-    flow: 'auth-code',
-
-    onSuccess: async (response) => {
-      try {
-        const data = await googleAuth({
-          code: response.code,
-          role,
-        }).unwrap();
-        localStorage.setItem('accessToken', data.data.accessToken);
-      } catch (error) {
-        console.error('Google authentication error:', error);
-      }
-    },
-
-    onError: () => {
-      console.error('Google login failed');
-    },
-  });
-
   return (
     <div className="flex min-h-screen">
-      {/* Left Panel */}
       <div
         className={`hidden lg:flex lg:w-1/2 relative overflow-hidden transition-colors duration-500 ${
           isTenant
@@ -91,30 +79,48 @@ const Login = () => {
           </div>
 
           <h2 className="mb-4 text-3xl font-bold text-center">
-            {isTenant ? 'Welcome Home' : 'Manage Your Empire'}
+            {isTenant ? 'Welcome Home' : 'Manage Your Properties'}
           </h2>
 
-          <p className="mb-10 text-center text-white/70 max-w-sm">
+          <p className="text-center text-white/70 max-w-sm">
             {isTenant
-              ? 'Access your room details, pay rent, and stay connected with your PG.'
-              : 'Track properties, manage tenants, and grow your PG business.'}
+              ? 'Access your room details, rent payments, and announcements.'
+              : 'Manage tenants, track rent payments, and control your PG.'}
           </p>
         </div>
       </div>
 
-      {/* Right Panel */}
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-12 bg-background">
         <div className="w-full max-w-sm">
+          {/* Logo */}
+
           <Link to="/" className="mb-10 flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <Building2 className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="text-lg font-bold text-foreground">StayEase</span>
+
+            <span className="text-lg font-bold">StayEase</span>
           </Link>
+
+          {/* Session Expired Message */}
+
+          {sessionExpired && (
+            <div className="mb-4 flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">
+              <AlertTriangle className="h-5 w-5 mt-0.5" />
+
+              <div className="text-sm">
+                <p className="font-medium">Session expired</p>
+                <p className="text-red-600/80">
+                  Your session expired. Please login again.
+                </p>
+              </div>
+            </div>
+          )}
 
           <h1 className="text-2xl font-bold">Sign in to your account</h1>
 
-          {/* Role toggle */}
+          {/* Role Switch */}
+
           <div className="mt-6 flex rounded-xl border bg-muted/50 p-1">
             <button
               onClick={() => setRole(UserRole.TENANT)}
@@ -141,7 +147,8 @@ const Login = () => {
             </button>
           </div>
 
-          {/* Email Login */}
+          {/* EMAIL LOGIN */}
+
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -153,12 +160,15 @@ const Login = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
+
                     <FormControl>
                       <div className="relative">
                         <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+
                         <Input className="pl-10" {...field} />
                       </div>
                     </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}
@@ -170,16 +180,20 @@ const Login = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
+
                     <FormControl>
                       <div className="relative">
                         <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+
                         <Input type="password" className="pl-10" {...field} />
                       </div>
                     </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <Button type="submit" className="w-full h-11 gap-2">
                 Sign In
                 <ArrowRight className="h-4 w-4" />
@@ -187,23 +201,26 @@ const Login = () => {
             </form>
           </Form>
 
-          {/* Divider */}
+          {/* DIVIDER */}
+
           <div className="relative my-6">
             <Separator />
+
             <span className="absolute left-1/2 top-1/2 bg-background px-3 text-xs -translate-x-1/2 -translate-y-1/2">
               or
             </span>
           </div>
 
-          {/* Google Login */}
+          {/* GOOGLE LOGIN */}
+
           <Button
             variant="outline"
             className="w-full gap-2"
             size="lg"
-            onClick={() => googleLogin()}
-            disabled={isLoading}
+            onClick={onGoogleLogin}
+            disabled={isGoogleLoading}
           >
-            {isLoading ? 'Signing in...' : 'Continue with Google'}
+            {isGoogleLoading ? 'Signing in...' : 'Continue with Google'}
           </Button>
 
           <p className="mt-6 text-center text-sm text-muted-foreground">

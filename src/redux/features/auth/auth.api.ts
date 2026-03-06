@@ -1,9 +1,12 @@
 import { baseApi } from '../../services/base-api';
+import type { ApiResponse } from '@/types/common/IApiResponse';
 
-export enum UserRole {
-  PROPERTY_ADMIN = 'PROPERTY_ADMIN',
-  TENANT = 'TENANT',
-}
+export const UserRole = {
+  PROPERTY_ADMIN: 'PROPERTY_ADMIN',
+  TENANT: 'TENANT',
+} as const;
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole];
 
 interface GoogleLoginRequest {
   code: string;
@@ -26,7 +29,13 @@ export const authApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+    dummyAuthCheck: builder.query<ApiResponse<unknown>, void>({
+      query: () => ({
+        url: '/auth/dummy',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-export const { useGoogleLoginMutation } = authApi;
+export const { useGoogleLoginMutation, useDummyAuthCheckQuery } = authApi;
