@@ -27,6 +27,7 @@ type Props = {
   onGoogleLogin: () => void;
   isGoogleLoading: boolean;
   sessionExpired?: boolean;
+  authNotice?: string;
 };
 
 const LoginForm = ({
@@ -34,6 +35,7 @@ const LoginForm = ({
   onGoogleLogin,
   isGoogleLoading,
   sessionExpired,
+  authNotice,
 }: Props) => {
   const [submitError, setSubmitError] = useState('');
   const form = useForm<LoginFormValues>({
@@ -54,6 +56,12 @@ const LoginForm = ({
               Your session expired. Please login again.
             </p>
           </div>
+        </div>
+      )}
+      {authNotice && (
+        <div className="mb-4 flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-800">
+          <AlertTriangle className="mt-0.5 h-5 w-5" />
+          <p className="text-sm">{authNotice}</p>
         </div>
       )}
 

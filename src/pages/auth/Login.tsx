@@ -31,6 +31,12 @@ export default function LoginPage() {
   const [verifyOtp] = useVerifyOtpMutation();
 
   const sessionExpired = reason === 'session-expired';
+  const authNotice =
+    reason === 'google-auth-failed'
+      ? 'Google sign-in failed. Please try again.'
+      : reason === 'google-cancelled'
+        ? 'Google sign-in was cancelled.'
+        : undefined;
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
@@ -70,6 +76,8 @@ export default function LoginPage() {
 
   const googleLogin = useGoogleLogin({
     flow: 'auth-code',
+    ux_mode: 'redirect',
+    redirect_uri: `${window.location.origin}/auth/google/callback`,
     onSuccess: async (response) => {
       try {
         const data = await googleAuth({
@@ -84,7 +92,7 @@ export default function LoginPage() {
       }
     },
     onError: () => {
-      console.error('Google login failed');
+      navigate('/login?reason=google-auth-failed');
     },
   });
 
@@ -104,6 +112,7 @@ export default function LoginPage() {
             onGoogleLogin={googleLogin}
             isGoogleLoading={isLoading}
             sessionExpired={sessionExpired}
+            authNotice={authNotice}
           />
         ) : (
           <OtpVerification
