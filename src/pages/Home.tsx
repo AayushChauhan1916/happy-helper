@@ -1,16 +1,23 @@
-import { useDummyAuthCheckQuery } from '@/redux/features/auth/auth.api';
+import HeroSection from '@/components/landing/HeroSection';
+import HowItWorks from '@/components/landing/HowItWorks';
+import Testimonials from '@/components/landing/Testimonials';
+import CTABanner from '@/components/landing/CTABanner';
+import Navbar from '@/components/navbar/Navbar';
+import FeaturesSection from '@/components/landing/FeatureSection';
+import Footer from '@/components/footer/Footer';
 
-export default function Home() {
-  const { isFetching, isError, isSuccess } = useDummyAuthCheckQuery(undefined, {
-    pollingInterval: 20_000,
-    refetchOnMountOrArgChange: true,
-  });
-
+const Home = () => {
   return (
-    <div>
-      <p>Home Page</p>
-      <p>Dummy auth check: {isFetching ? 'checking...' : 'idle'}</p>
-      <p>Status: {isSuccess ? 'success' : isError ? 'failed' : 'waiting'}</p>
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <HeroSection />
+      <FeaturesSection />
+      <HowItWorks />
+      <Testimonials />
+      <CTABanner />
+      <Footer />
     </div>
   );
-}
+};
+
+export default Home;

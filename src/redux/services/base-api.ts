@@ -8,13 +8,14 @@ import type {
 } from '@reduxjs/toolkit/query/react';
 
 const rawBaseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:3000/api/v1',
+  baseUrl: 'http://localhost:3000/api',
   credentials: 'include',
 
   prepareHeaders: (headers) => {
     const token = localStorage.getItem('accessToken');
 
-    if (token) {
+    // Keep request-specific Authorization (e.g. Basic for login) untouched.
+    if (token && !headers.has('Authorization')) {
       headers.set('Authorization', `Bearer ${token}`);
     }
 
@@ -27,10 +28,12 @@ const baseQueryWithReauth: BaseQueryFn<
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   let result = await rawBaseQuery(args, api, extraOptions);
-  if (result.error && result.error.status === 401) {
+  const isAuthRoute =
+    typeof args !== 'string' && args.url?.startsWith('/v1/auth');
+  if (result.error && result.error.status === 401 && !isAuthRoute) {
     const refreshResult = await rawBaseQuery(
       {
-        url: '/auth/refresh',
+        url: '/v1/auth/refresh',
         method: 'POST',
       },
       api,
