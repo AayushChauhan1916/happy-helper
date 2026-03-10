@@ -2,15 +2,11 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router-dom';
-import {
-  Mail,
-  Lock,
-  ArrowRight,
-  AlertTriangle,
-} from 'lucide-react';
+import { Mail, Lock, ArrowRight, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import GoogleAuthButton from '@/components/auth/GoogleAuthButton';
 import {
   Form,
   FormControl,
@@ -136,7 +132,9 @@ const LoginForm = ({
             <ArrowRight className="h-4 w-4" />
           </Button>
           {submitError && (
-            <p className="text-sm font-medium text-destructive">{submitError}</p>
+            <p className="text-sm font-medium text-destructive">
+              {submitError}
+            </p>
           )}
         </form>
       </Form>
@@ -148,15 +146,10 @@ const LoginForm = ({
         </span>
       </div>
 
-      <Button
-        variant="outline"
-        className="h-12 w-full gap-2.5 rounded-xl"
-        size="lg"
+      <GoogleAuthButton
         onClick={onGoogleLogin}
         disabled={isGoogleLoading}
-      >
-        {isGoogleLoading ? 'Signing in...' : 'Continue with Google'}
-      </Button>
+      />
 
       <p className="mt-7 text-center text-sm text-muted-foreground">
         Don't have an account?{' '}

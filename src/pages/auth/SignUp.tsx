@@ -10,6 +10,7 @@ import type { SignupFormData } from '@/schemas/auth/signup.schema';
 import { UserRole } from '@/types/common/roles';
 import { OtpPurpose, type SignUpRequest } from '@/types/requests/auth/auth.requests';
 import { getApiErrorMessage } from '@/lib/get-api-error-message';
+import { useGoogleAuthRedirect } from '@/hooks/use-google-auth-redirect';
 
 type Step = 'form' | 'otp';
 
@@ -22,6 +23,9 @@ export const SignUpPage = () => {
   const navigate = useNavigate();
   const [signUp, { isLoading: isSigningUp }] = useSignUpMutation();
   const [verifyOtp] = useVerifyOtpMutation();
+  const { startGoogleAuth, isStartingGoogleAuth } = useGoogleAuthRedirect({
+    failRedirectPath: '/signup',
+  });
 
   const handleSignupSubmit = async (data: SignupFormData) => {
     setSubmitError('');
@@ -79,6 +83,8 @@ export const SignUpPage = () => {
             role={role}
             setRole={setRole}
             onSubmit={handleSignupSubmit}
+            onGoogleLogin={startGoogleAuth}
+            isGoogleLoading={isStartingGoogleAuth}
             isSubmitting={isSigningUp}
             submitError={submitError}
           />

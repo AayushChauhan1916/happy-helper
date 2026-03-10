@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { useGoogleLogin } from '@react-oauth/google';
 import { Building2 } from 'lucide-react';
 import AuthSplitLayout from '@/components/auth/AuthSplitLayout';
 import OtpVerification from '@/components/auth/OtpVerification';
 import {
-  useGoogleLoginMutation,
   useLoginMutation,
   useVerifyOtpMutation,
 } from '@/redux/features/auth/auth.api';
@@ -14,6 +12,7 @@ import { UserRole } from '@/types/common/roles';
 import LoginForm from '@/components/login/LoginForm';
 import { getApiErrorMessage } from '@/lib/get-api-error-message';
 import { OtpPurpose } from '@/types/requests/auth/auth.requests';
+import { useGoogleAuthRedirect } from '@/hooks/use-google-auth-redirect';
 
 type Step = 'form' | 'otp';
 
@@ -23,12 +22,13 @@ export default function LoginPage() {
 
   const reason = searchParams.get('reason');
   const [step, setStep] = useState<Step>('form');
-  const defaultRole = UserRole.TENANT;
-  const [loginRole, setLoginRole] = useState<string>(defaultRole);
+  const [loginRole, setLoginRole] = useState<string>(UserRole.TENANT);
   const [emailForOtp, setEmailForOtp] = useState('');
-  const [googleAuth, { isLoading }] = useGoogleLoginMutation();
   const [login] = useLoginMutation();
   const [verifyOtp] = useVerifyOtpMutation();
+  const { startGoogleAuth, isStartingGoogleAuth } = useGoogleAuthRedirect({
+    failRedirectPath: '/login',
+  });
 
   const sessionExpired = reason === 'session-expired';
   const authNotice =
@@ -74,30 +74,8 @@ export default function LoginPage() {
     navigate('/');
   };
 
-  const googleLogin = useGoogleLogin({
-    flow: 'auth-code',
-    ux_mode: 'redirect',
-    redirect_uri: `${window.location.origin}/auth/google/callback`,
-    onSuccess: async (response) => {
-      try {
-        const data = await googleAuth({
-          code: response.code,
-          role: defaultRole,
-        }).unwrap();
-
-        localStorage.setItem('accessToken', data.data.accessToken);
-        navigate('/');
-      } catch (error) {
-        console.error('Google authentication error:', error);
-      }
-    },
-    onError: () => {
-      navigate('/login?reason=google-auth-failed');
-    },
-  });
-
   return (
-    <AuthSplitLayout role={defaultRole} mode="login">
+    <AuthSplitLayout role={UserRole.TENANT} mode="login">
       <div className="w-full max-w-[380px]">
         <Link to="/" className="mb-10 flex items-center gap-2 lg:hidden">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary">
@@ -109,8 +87,8 @@ export default function LoginPage() {
         {step === 'form' ? (
           <LoginForm
             onSubmit={onSubmit}
-            onGoogleLogin={googleLogin}
-            isGoogleLoading={isLoading}
+            onGoogleLogin={startGoogleAuth}
+            isGoogleLoading={isStartingGoogleAuth}
             sessionExpired={sessionExpired}
             authNotice={authNotice}
           />
