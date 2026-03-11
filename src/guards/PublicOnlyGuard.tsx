@@ -1,24 +1,25 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import AuthRouteLoader from '@/components/auth/AuthRouteLoader';
-import { useMeQuery } from '@/redux/features/auth/auth.api';
+import { useSelector } from 'react-redux';
 import { getDashboardPathByRole, hasAccessToken } from '@/lib/auth';
+import type { RootState } from '@/redux/app/store';
 
 export default function PublicOnlyGuard() {
   const isLoggedIn = hasAccessToken();
-  const { data, isLoading, isFetching } = useMeQuery(undefined, {
-    skip: !isLoggedIn,
-  });
+  const { user, isHydrating, isInitialized } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
   if (!isLoggedIn) {
     return <Outlet />;
   }
 
-  if (isLoading || isFetching) {
-    return <AuthRouteLoader message="Checking your account..." />;
+  if (!isInitialized || isHydrating) {
+    return <AuthRouteLoader />;
   }
 
-  if (data?.data?.role) {
-    return <Navigate to={getDashboardPathByRole(data.data.role)} replace />;
+  if (user?.role) {
+    return <Navigate to={getDashboardPathByRole(user.role)} replace />;
   }
 
   localStorage.removeItem('accessToken');

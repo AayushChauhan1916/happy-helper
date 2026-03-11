@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Building2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import AuthSplitLayout from '@/components/auth/AuthSplitLayout';
 import OtpVerification from '@/components/auth/OtpVerification';
@@ -11,11 +12,13 @@ import { UserRole } from '@/types/common/roles';
 import { OtpPurpose, type SignUpRequest } from '@/types/requests/auth/auth.requests';
 import { getApiErrorMessage } from '@/lib/get-api-error-message';
 import { useGoogleAuthRedirect } from '@/hooks/use-google-auth-redirect';
-import { getDashboardPathByRole } from '@/lib/auth';
+import { completeAuthSession } from '@/redux/features/auth/complete-auth-session';
+import type { AppDispatch } from '@/redux/app/store';
 
 type Step = 'form' | 'otp';
 
 export const SignUpPage = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const [role, setRole] = useState<UserRole>(UserRole.TENANT);
   const [step, setStep] = useState<Step>('form');
   const [submitError, setSubmitError] = useState('');
@@ -58,8 +61,11 @@ export const SignUpPage = () => {
     }).unwrap();
 
     if (response.data.accessToken) {
-      localStorage.setItem('accessToken', response.data.accessToken);
-      navigate(getDashboardPathByRole(role));
+      const redirectPath = await completeAuthSession(
+        response.data.accessToken,
+        dispatch,
+      );
+      navigate(redirectPath);
       return;
     }
 

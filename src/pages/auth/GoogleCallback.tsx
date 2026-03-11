@@ -1,12 +1,16 @@
 import { useEffect, useRef } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Building2, Loader2 } from 'lucide-react';
+import { useDispatch } from 'react-redux';
 import AuthSplitLayout from '@/components/auth/AuthSplitLayout';
 import { useGoogleLoginMutation } from '@/redux/features/auth/auth.api';
 import { UserRole } from '@/types/common/roles';
+import { completeAuthSession } from '@/redux/features/auth/complete-auth-session';
+import type { AppDispatch } from '@/redux/app/store';
 
 export default function GoogleCallbackPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
   const [googleAuth] = useGoogleLoginMutation();
   const hasCalled = useRef(false);
@@ -29,8 +33,11 @@ export default function GoogleCallbackPage() {
           role: UserRole.TENANT,
         }).unwrap();
 
-        localStorage.setItem('accessToken', data.data.accessToken);
-        navigate('/dashboard');
+        const redirectPath = await completeAuthSession(
+          data.data.accessToken,
+          dispatch,
+        );
+        navigate(redirectPath);
       } catch (error) {
         console.error('Google callback authentication error:', error);
         navigate('/login?reason=google-auth-failed');
@@ -38,7 +45,7 @@ export default function GoogleCallbackPage() {
     };
 
     void completeGoogleLogin();
-  }, [googleAuth, navigate, searchParams]);
+  }, [dispatch, googleAuth, navigate, searchParams]);
 
   return (
     <AuthSplitLayout role={UserRole.TENANT} mode="login">

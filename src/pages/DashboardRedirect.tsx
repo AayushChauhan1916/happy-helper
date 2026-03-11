@@ -1,26 +1,27 @@
 import { Navigate } from 'react-router-dom';
 import AuthRouteLoader from '@/components/auth/AuthRouteLoader';
-import { useMeQuery } from '@/redux/features/auth/auth.api';
+import { useSelector } from 'react-redux';
 import { getDashboardPathByRole, hasAccessToken } from '@/lib/auth';
+import type { RootState } from '@/redux/app/store';
 
 export default function DashboardRedirect() {
   const isLoggedIn = hasAccessToken();
-  const { data, isLoading, isFetching, isError } = useMeQuery(undefined, {
-    skip: !isLoggedIn,
-  });
+  const { user, isHydrating, isInitialized } = useSelector(
+    (state: RootState) => state.auth,
+  );
 
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />;
   }
 
-  if (isLoading || isFetching) {
-    return <AuthRouteLoader message="Loading your dashboard..." />;
+  if (!isInitialized || isHydrating) {
+    return <AuthRouteLoader />;
   }
 
-  if (isError || !data?.data?.role) {
+  if (!user?.role) {
     localStorage.removeItem('accessToken');
     return <Navigate to="/login?reason=session-expired" replace />;
   }
 
-  return <Navigate to={getDashboardPathByRole(data.data.role)} replace />;
+  return <Navigate to={getDashboardPathByRole(user.role)} replace />;
 }

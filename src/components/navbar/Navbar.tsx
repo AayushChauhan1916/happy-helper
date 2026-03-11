@@ -2,8 +2,9 @@ import { Building2, Menu, X, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useMeQuery } from "@/redux/features/auth/auth.api";
+import { useSelector } from "react-redux";
 import { hasAccessToken } from "@/lib/auth";
+import type { RootState } from "@/redux/app/store";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -16,8 +17,8 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const isLoggedIn = hasAccessToken();
-  const { data } = useMeQuery(undefined, { skip: !isLoggedIn });
-  const showDashboard = Boolean(data?.data?.role);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const showDashboard = isLoggedIn && Boolean(user?.role);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);

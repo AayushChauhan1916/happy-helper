@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Building2 } from 'lucide-react';
+import { useDispatch } from 'react-redux';
 import AuthSplitLayout from '@/components/auth/AuthSplitLayout';
 import OtpVerification from '@/components/auth/OtpVerification';
 import {
@@ -13,17 +14,18 @@ import LoginForm from '@/components/login/LoginForm';
 import { getApiErrorMessage } from '@/lib/get-api-error-message';
 import { OtpPurpose } from '@/types/requests/auth/auth.requests';
 import { useGoogleAuthRedirect } from '@/hooks/use-google-auth-redirect';
-import { getDashboardPathByRole } from '@/lib/auth';
+import { completeAuthSession } from '@/redux/features/auth/complete-auth-session';
+import type { AppDispatch } from '@/redux/app/store';
 
 type Step = 'form' | 'otp';
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
 
   const reason = searchParams.get('reason');
   const [step, setStep] = useState<Step>('form');
-  const [loginRole, setLoginRole] = useState<string>(UserRole.TENANT);
   const [emailForOtp, setEmailForOtp] = useState('');
   const [login] = useLoginMutation();
   const [verifyOtp] = useVerifyOtpMutation();
@@ -47,7 +49,6 @@ export default function LoginPage() {
       }).unwrap();
 
       setEmailForOtp(response.data.email);
-      setLoginRole(response.data.role);
       setStep('otp');
     } catch (error) {
       throw new Error(
@@ -67,8 +68,15 @@ export default function LoginPage() {
       throw new Error('Access token was not returned by verify OTP.');
     }
 
-    localStorage.setItem('accessToken', response.data.accessToken);
-    navigate(getDashboardPathByRole(loginRole));
+    try {
+      const redirectPath = await completeAuthSession(
+        response.data.accessToken,
+        dispatch,
+      );
+      navigate(redirectPath);
+    } catch {
+      throw new Error('Login completed but failed to load your profile.');
+    }
   };
 
   return (
