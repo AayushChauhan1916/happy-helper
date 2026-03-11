@@ -22,14 +22,14 @@ const TopNavbar = ({
   userInitials = 'JD',
 }: TopNavbarProps) => {
   return (
-    <header className="flex h-14 items-center justify-between border-b border-border/40 bg-card/50 backdrop-blur-sm px-4 lg:px-6">
+    <header className="flex h-14 items-center justify-between border-b border-border/80 bg-white/80 px-4 backdrop-blur-sm lg:px-6">
       <div className="flex items-center gap-3">
         <SidebarTrigger className="-ml-1" />
         <div className="relative hidden md:block">
           <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Search..."
-            className="h-9 w-56 rounded-lg pl-9 text-sm bg-muted/30 border-border/40"
+            className="h-9 w-56 rounded-lg border-border/70 bg-white pl-9 text-sm shadow-sm"
           />
         </div>
       </div>

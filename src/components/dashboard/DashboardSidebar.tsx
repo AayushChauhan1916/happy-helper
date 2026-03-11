@@ -1,4 +1,4 @@
-import { type LucideIcon } from 'lucide-react';
+﻿import { type LucideIcon } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { Building2 } from 'lucide-react';
 import {
@@ -83,7 +83,7 @@ const DashboardSidebar = ({ items, role }: DashboardSidebarProps) => {
 
       <SidebarFooter className="p-4">
         {!collapsed && (
-          <p className="text-[10px] text-muted-foreground">© 2026 StayEase</p>
+          <p className="text-[10px] text-muted-foreground">(c) 2026 StayEase</p>
         )}
       </SidebarFooter>
     </Sidebar>
@@ -91,3 +91,5 @@ const DashboardSidebar = ({ items, role }: DashboardSidebarProps) => {
 };
 
 export default DashboardSidebar;
+
+
