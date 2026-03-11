@@ -13,6 +13,7 @@ import LoginForm from '@/components/login/LoginForm';
 import { getApiErrorMessage } from '@/lib/get-api-error-message';
 import { OtpPurpose } from '@/types/requests/auth/auth.requests';
 import { useGoogleAuthRedirect } from '@/hooks/use-google-auth-redirect';
+import { getDashboardPathByRole } from '@/lib/auth';
 
 type Step = 'form' | 'otp';
 
@@ -67,11 +68,7 @@ export default function LoginPage() {
     }
 
     localStorage.setItem('accessToken', response.data.accessToken);
-    localStorage.setItem(
-      'user',
-      JSON.stringify({ email: emailForOtp, role: loginRole }),
-    );
-    navigate('/');
+    navigate(getDashboardPathByRole(loginRole));
   };
 
   return (

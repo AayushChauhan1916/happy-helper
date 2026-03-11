@@ -1,14 +1,20 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Building2, LayoutDashboard, Users } from 'lucide-react';
+import DashboardShell from '@/components/dashboard/DashboardShell';
+
 
 export default function OwnerLayout() {
+  const items = [
+    { title: 'Dashboard', url: '/owner/dashboard', icon: LayoutDashboard },
+    { title: 'Properties', url: '/owner/properties', icon: Building2 },
+    { title: 'Tenants', url: '/owner/tenants', icon: Users },
+  ];
+
   return (
-    <div>
-      <h2>Owner Layout</h2>
-      <nav>
-        <Link to="/owner/dashboard">Owner Dashboard</Link>
-      </nav>
-      <hr />
-      <Outlet />
-    </div>
+    <DashboardShell
+      roleLabel="PG Admin"
+      items={items}
+      userName="PG Admin"
+      userInitials="PG"
+    />
   );
 }

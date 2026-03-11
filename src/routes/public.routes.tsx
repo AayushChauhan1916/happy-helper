@@ -4,13 +4,21 @@ import Home from '../pages/Home';
 import LoginPage from '../pages/auth/Login';
 import { SignUpPage } from '@/pages/auth/SignUp';
 import GoogleCallbackPage from '@/pages/auth/GoogleCallback';
+import PublicOnlyGuard from '@/guards/PublicOnlyGuard';
+import DashboardRedirect from '@/pages/DashboardRedirect';
 
 export const publicRoutes: RouteObject[] = [
   {
     element: <PublicLayout />,
     children: [{ index: true, element: <Home /> }],
   },
-  { path: 'login', element: <LoginPage /> },
+  {
+    element: <PublicOnlyGuard />,
+    children: [
+      { path: 'login', element: <LoginPage /> },
+      { path: 'signup', element: <SignUpPage /> },
+    ],
+  },
   { path: 'auth/google/callback', element: <GoogleCallbackPage /> },
-  { path: 'signup', element: <SignUpPage /> },
+  { path: 'dashboard', element: <DashboardRedirect /> },
 ];

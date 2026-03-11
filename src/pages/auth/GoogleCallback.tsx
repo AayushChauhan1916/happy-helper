@@ -30,7 +30,7 @@ export default function GoogleCallbackPage() {
         }).unwrap();
 
         localStorage.setItem('accessToken', data.data.accessToken);
-        navigate('/');
+        navigate('/dashboard');
       } catch (error) {
         console.error('Google callback authentication error:', error);
         navigate('/login?reason=google-auth-failed');

@@ -9,6 +9,7 @@ import type {
 import type {
   AuthTokenResponse,
   LoginResponse,
+  MeResponse,
   SignUpResponse,
   VerifyOtpResponse,
 } from '@/types/responses/auth/auth.responses';
@@ -56,6 +57,12 @@ export const authApi = baseApi.injectEndpoints({
       }),
       },
     ),
+    me: builder.query<ApiResponse<MeResponse>, void>({
+      query: () => ({
+        url: '/v1/auth/me',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
@@ -65,4 +72,5 @@ export const {
   useSignUpMutation,
   useLoginMutation,
   useVerifyOtpMutation,
+  useMeQuery,
 } = authApi;

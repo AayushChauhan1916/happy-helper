@@ -2,6 +2,8 @@ import { Building2, Menu, X, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useMeQuery } from "@/redux/features/auth/auth.api";
+import { hasAccessToken } from "@/lib/auth";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -13,6 +15,9 @@ const navLinks = [
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const isLoggedIn = hasAccessToken();
+  const { data } = useMeQuery(undefined, { skip: !isLoggedIn });
+  const showDashboard = Boolean(data?.data?.role);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -48,14 +53,24 @@ const Navbar = () => {
         </div>
 
         <div className="hidden items-center gap-2.5 md:flex">
-          <Button variant="ghost" size="sm" className="rounded-lg text-muted-foreground hover:text-foreground" asChild>
-            <Link to="/login">Sign In</Link>
-          </Button>
-          <Button size="sm" className="gap-1.5 rounded-xl shadow-lg shadow-primary/20 px-5" asChild>
-            <Link to="/signup">
-              Get Started <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </Button>
+          {showDashboard ? (
+            <Button size="sm" className="gap-1.5 rounded-xl shadow-lg shadow-primary/20 px-5" asChild>
+              <Link to="/dashboard">
+                Dashboard <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" className="rounded-lg text-muted-foreground hover:text-foreground" asChild>
+                <Link to="/login">Sign In</Link>
+              </Button>
+              <Button size="sm" className="gap-1.5 rounded-xl shadow-lg shadow-primary/20 px-5" asChild>
+                <Link to="/signup">
+                  Get Started <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              </Button>
+            </>
+          )}
         </div>
 
         <button
@@ -80,12 +95,20 @@ const Navbar = () => {
               </a>
             ))}
             <div className="flex gap-2 pt-4 mt-3 border-t border-border/40">
-              <Button variant="outline" size="sm" className="flex-1 rounded-xl" asChild>
-                <Link to="/login">Sign In</Link>
-              </Button>
-              <Button size="sm" className="flex-1 rounded-xl shadow-lg shadow-primary/20" asChild>
-                <Link to="/signup">Get Started</Link>
-              </Button>
+              {showDashboard ? (
+                <Button size="sm" className="flex-1 rounded-xl shadow-lg shadow-primary/20" asChild>
+                  <Link to="/dashboard">Dashboard</Link>
+                </Button>
+              ) : (
+                <>
+                  <Button variant="outline" size="sm" className="flex-1 rounded-xl" asChild>
+                    <Link to="/login">Sign In</Link>
+                  </Button>
+                  <Button size="sm" className="flex-1 rounded-xl shadow-lg shadow-primary/20" asChild>
+                    <Link to="/signup">Get Started</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

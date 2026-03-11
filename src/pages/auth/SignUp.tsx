@@ -11,6 +11,7 @@ import { UserRole } from '@/types/common/roles';
 import { OtpPurpose, type SignUpRequest } from '@/types/requests/auth/auth.requests';
 import { getApiErrorMessage } from '@/lib/get-api-error-message';
 import { useGoogleAuthRedirect } from '@/hooks/use-google-auth-redirect';
+import { getDashboardPathByRole } from '@/lib/auth';
 
 type Step = 'form' | 'otp';
 
@@ -50,18 +51,19 @@ export const SignUpPage = () => {
   };
 
   const handleOtpVerify = async (otp: string) => {
-    await verifyOtp({
+    const response = await verifyOtp({
       email: contactEmail,
       otp,
       purpose: OtpPurpose.SIGNUP_VERIFICATION,
     }).unwrap();
 
-    if (role === UserRole.TENANT) {
-      navigate('/tenant');
+    if (response.data.accessToken) {
+      localStorage.setItem('accessToken', response.data.accessToken);
+      navigate(getDashboardPathByRole(role));
       return;
     }
 
-    navigate('/owner');
+    navigate('/login');
   };
 
   const handleOtpResend = async () => {

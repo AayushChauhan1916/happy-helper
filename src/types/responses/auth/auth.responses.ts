@@ -17,3 +17,20 @@ export interface SignUpResponse {
   role: string;
   requiresVerification: boolean;
 }
+
+export interface MeResponse {
+  _id: string;
+  fullName: string;
+  email: string;
+  password: string | null;
+  authProvider: string;
+  phoneNumber: string;
+  role: string;
+  propertyId: string | null;
+  ownedProperties: string[];
+  isActive: boolean;
+  isEmailVerified: boolean;
+  isPhoneNumberVerified: boolean;
+  picture: string;
+  googleProviderId: string | null;
+}
