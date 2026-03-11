@@ -32,7 +32,6 @@ export default function GoogleCallbackPage() {
         const storedRole = sessionStorage.getItem('authRole');
         const resolvedRole =
           storedRole === UserRole.PROPERTY_ADMIN ||
-          storedRole === UserRole.SUPER_ADMIN ||
           storedRole === UserRole.TENANT
             ? storedRole
             : UserRole.TENANT;
@@ -48,9 +47,12 @@ export default function GoogleCallbackPage() {
           dispatch,
         );
         navigate(redirectPath);
-      } catch {
+      } catch (error) {
         sessionStorage.removeItem('authRole');
-        navigate('/login?reason=google-auth-failed');
+        console.log(error, 'callback');
+        navigate('/login?reason=google-auth-failed', {
+          replace: true,
+        });
       }
     };
 

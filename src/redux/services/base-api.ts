@@ -7,6 +7,12 @@ import type {
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
 
+const AUTH_SKIP_ROUTES = [
+  '/v1/auth/login',
+  '/v1/auth/register',
+  '/v1/auth/refresh',
+];
+
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:3000/api',
   credentials: 'include',
@@ -28,9 +34,11 @@ const baseQueryWithReauth: BaseQueryFn<
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   let result = await rawBaseQuery(args, api, extraOptions);
-  const isAuthRoute =
-    typeof args !== 'string' && args.url?.startsWith('/v1/auth');
-  if (result.error && result.error.status === 401 && !isAuthRoute) {
+  const url = typeof args === 'string' ? args : (args.url ?? '');
+  const skipRefresh = AUTH_SKIP_ROUTES.some((route) =>
+    url.startsWith(route),
+  );
+  if (result.error && result.error.status === 401 && !skipRefresh) {
     const refreshResult = await rawBaseQuery(
       {
         url: '/v1/auth/refresh',

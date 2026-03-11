@@ -74,7 +74,9 @@ export default function LoginPage() {
         response.data.accessToken,
         dispatch,
       );
-      navigate(redirectPath);
+      navigate(redirectPath, {
+        replace: true,
+      });
     } catch {
       throw new Error('Login completed but failed to load your profile.');
     }

@@ -6,10 +6,16 @@ import { useDispatch } from 'react-redux';
 import AuthSplitLayout from '@/components/auth/AuthSplitLayout';
 import OtpVerification from '@/components/auth/OtpVerification';
 import SignupForm from '@/components/signup/SignupForm';
-import { useSignUpMutation, useVerifyOtpMutation } from '@/redux/features/auth/auth.api';
+import {
+  useSignUpMutation,
+  useVerifyOtpMutation,
+} from '@/redux/features/auth/auth.api';
 import type { SignupFormData } from '@/schemas/auth/signup.schema';
 import { UserRole } from '@/types/common/roles';
-import { OtpPurpose, type SignUpRequest } from '@/types/requests/auth/auth.requests';
+import {
+  OtpPurpose,
+  type SignUpRequest,
+} from '@/types/requests/auth/auth.requests';
 import { getApiErrorMessage } from '@/lib/get-api-error-message';
 import { useGoogleAuthRedirect } from '@/hooks/use-google-auth-redirect';
 import { completeAuthSession } from '@/redux/features/auth/complete-auth-session';
@@ -48,7 +54,10 @@ export const SignUpPage = () => {
       setStep('otp');
     } catch (error) {
       setSubmitError(
-        getApiErrorMessage(error, 'Unable to create account. Please try again.'),
+        getApiErrorMessage(
+          error,
+          'Unable to create account. Please try again.',
+        ),
       );
     }
   };
@@ -65,7 +74,9 @@ export const SignUpPage = () => {
         response.data.accessToken,
         dispatch,
       );
-      navigate(redirectPath);
+      navigate(redirectPath, {
+        replace: true,
+      });
       return;
     }
 

@@ -3,6 +3,7 @@ import AdminLayout from '@/layouts/AdminLayout';
 import AdminDashboard from '@/pages/Admin/AdminDashbaord';
 import RoleGuard from '@/guards/RoleGuard';
 import { UserRole } from '@/types/common/roles';
+import ComingSoonPage from '@/pages/common/ComingSoonPage';
 
 export const adminRoutes: RouteObject = {
   path: 'admin',
@@ -10,7 +11,12 @@ export const adminRoutes: RouteObject = {
   children: [
     {
       element: <AdminLayout />,
-      children: [{ path: 'dashboard', element: <AdminDashboard /> }],
+      children: [
+        { index: true, element: <AdminDashboard /> },
+        { path: 'dashboard', element: <AdminDashboard /> },
+        { path: 'users', element: <ComingSoonPage title="Users" /> },
+        { path: 'settings', element: <ComingSoonPage title="Settings" /> },
+      ],
     },
   ],
 };

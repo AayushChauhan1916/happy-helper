@@ -23,7 +23,9 @@ export const useGoogleAuthRedirect = ({
     onError: () => {
       sessionStorage.removeItem('authRole');
       setIsStartingGoogleAuth(false);
-      navigate(`${failRedirectPath}?reason=google-auth-failed`);
+      navigate(`${failRedirectPath}?reason=google-auth-failed`, {
+        replace: true,
+      });
     },
   });
 

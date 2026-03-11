@@ -12,6 +12,9 @@ export async function completeAuthSession(
 
   try {
     const meResponse = await dispatch(authApi.endpoints.me.initiate()).unwrap();
+    if (!meResponse.data) {
+      throw new Error('Login Failed');
+    }
     dispatch(setUser(meResponse.data));
     return getDashboardPathByRole(meResponse.data.role);
   } catch (error) {

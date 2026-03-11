@@ -3,6 +3,7 @@ import RoleGuard from '@/guards/RoleGuard';
 import TenantLayout from '@/layouts/TenantLayout';
 import TenantDashboard from '@/pages/tenant/TenantDashboard';
 import { UserRole } from '@/types/common/roles';
+import ComingSoonPage from '@/pages/common/ComingSoonPage';
 
 export const tenantRoutes: RouteObject = {
   path: 'tenant',
@@ -10,7 +11,12 @@ export const tenantRoutes: RouteObject = {
   children: [
     {
       element: <TenantLayout />,
-      children: [{ path: 'dashboard', element: <TenantDashboard /> }],
+      children: [
+        { index: true, element: <TenantDashboard /> },
+        { path: 'dashboard', element: <TenantDashboard /> },
+        { path: 'room', element: <ComingSoonPage title="My Room" /> },
+        { path: 'payments', element: <ComingSoonPage title="Payments" /> },
+      ],
     },
   ],
 };

@@ -28,6 +28,7 @@ export interface MeResponse {
   role: string;
   propertyId: string | null;
   ownedProperties: string[];
+  isOwnerOnboardingCompleted: boolean;
   isActive: boolean;
   isEmailVerified: boolean;
   isPhoneNumberVerified: boolean;

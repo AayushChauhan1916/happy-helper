@@ -1,7 +1,6 @@
 import { Building2, LayoutDashboard, Users } from 'lucide-react';
 import DashboardShell from '@/components/dashboard/DashboardShell';
 
-
 export default function OwnerLayout() {
   const items = [
     { title: 'Dashboard', url: '/owner/dashboard', icon: LayoutDashboard },
