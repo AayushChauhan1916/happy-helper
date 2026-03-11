@@ -26,6 +26,7 @@ export default function LoginPage() {
 
   const reason = searchParams.get('reason');
   const [step, setStep] = useState<Step>('form');
+  const [role, setRole] = useState<UserRole>(UserRole.TENANT);
   const [emailForOtp, setEmailForOtp] = useState('');
   const [login] = useLoginMutation();
   const [verifyOtp] = useVerifyOtpMutation();
@@ -80,7 +81,7 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthSplitLayout role={UserRole.TENANT} mode="login">
+    <AuthSplitLayout role={role} mode="login">
       <div className="w-full max-w-[380px]">
         <Link to="/" className="mb-10 flex items-center gap-2 lg:hidden">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary">
@@ -92,8 +93,10 @@ export default function LoginPage() {
         {step === 'form' ? (
           <LoginForm
             onSubmit={onSubmit}
-            onGoogleLogin={startGoogleAuth}
+            onGoogleLogin={() => startGoogleAuth(role)}
             isGoogleLoading={isStartingGoogleAuth}
+            selectedRole={role}
+            onRoleChange={setRole}
             sessionExpired={sessionExpired}
             authNotice={authNotice}
           />

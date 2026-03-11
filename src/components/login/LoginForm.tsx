@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, AlertTriangle } from 'lucide-react';
+import { Mail, Lock, ArrowRight, AlertTriangle, KeyRound, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
@@ -17,11 +17,14 @@ import {
 } from '@/components/ui/form';
 import { loginSchema } from '@/schemas/auth/login.schema';
 import type { LoginForm as LoginFormValues } from '@/schemas/auth/login.schema';
+import { UserRole } from '@/types/common/roles';
 
 type Props = {
   onSubmit: (data: LoginFormValues) => Promise<void> | void;
   onGoogleLogin: () => void;
   isGoogleLoading: boolean;
+  selectedRole: UserRole;
+  onRoleChange: (role: UserRole) => void;
   sessionExpired?: boolean;
   authNotice?: string;
 };
@@ -30,6 +33,8 @@ const LoginForm = ({
   onSubmit,
   onGoogleLogin,
   isGoogleLoading,
+  selectedRole,
+  onRoleChange,
   sessionExpired,
   authNotice,
 }: Props) => {
@@ -65,6 +70,33 @@ const LoginForm = ({
       <p className="mt-1.5 text-sm text-muted-foreground">
         Sign in to continue to your dashboard
       </p>
+
+      <div className="mt-5 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => onRoleChange(UserRole.TENANT)}
+          className={`flex items-center justify-center gap-2 rounded-xl border py-2.5 text-sm font-medium transition-colors ${
+            selectedRole === UserRole.TENANT
+              ? 'border-primary/30 bg-primary/10 text-primary'
+              : 'border-border bg-background text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          <Users className="h-4 w-4" />
+          Tenant
+        </button>
+        <button
+          type="button"
+          onClick={() => onRoleChange(UserRole.PROPERTY_ADMIN)}
+          className={`flex items-center justify-center gap-2 rounded-xl border py-2.5 text-sm font-medium transition-colors ${
+            selectedRole === UserRole.PROPERTY_ADMIN
+              ? 'border-primary/30 bg-primary/10 text-primary'
+              : 'border-border bg-background text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          <KeyRound className="h-4 w-4" />
+          PG Owner
+        </button>
+      </div>
 
       <Form {...form}>
         <form

@@ -22,24 +22,34 @@ export default function GoogleCallbackPage() {
     hasCalled.current = true;
     const code = searchParams.get('code');
     if (!code) {
+      sessionStorage.removeItem('authRole');
       navigate('/login?reason=google-cancelled');
       return;
     }
 
     const completeGoogleLogin = async () => {
       try {
+        const storedRole = sessionStorage.getItem('authRole');
+        const resolvedRole =
+          storedRole === UserRole.PROPERTY_ADMIN ||
+          storedRole === UserRole.SUPER_ADMIN ||
+          storedRole === UserRole.TENANT
+            ? storedRole
+            : UserRole.TENANT;
+
         const data = await googleAuth({
           code,
-          role: UserRole.TENANT,
+          role: resolvedRole,
         }).unwrap();
+        sessionStorage.removeItem('authRole');
 
         const redirectPath = await completeAuthSession(
           data.data.accessToken,
           dispatch,
         );
         navigate(redirectPath);
-      } catch (error) {
-        console.error('Google callback authentication error:', error);
+      } catch {
+        sessionStorage.removeItem('authRole');
         navigate('/login?reason=google-auth-failed');
       }
     };

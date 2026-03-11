@@ -1,6 +1,7 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { UserRole } from '@/types/common/roles';
 
 type UseGoogleAuthRedirectOptions = {
   failRedirectPath?: string;
@@ -20,6 +21,7 @@ export const useGoogleAuthRedirect = ({
       // Redirect flow handles completion in /auth/google/callback.
     },
     onError: () => {
+      sessionStorage.removeItem('authRole');
       setIsStartingGoogleAuth(false);
       navigate(`${failRedirectPath}?reason=google-auth-failed`);
     },
@@ -27,7 +29,8 @@ export const useGoogleAuthRedirect = ({
 
   return {
     isStartingGoogleAuth,
-    startGoogleAuth: () => {
+    startGoogleAuth: (role: UserRole) => {
+      sessionStorage.setItem('authRole', role);
       setIsStartingGoogleAuth(true);
       startGoogleAuth();
     },

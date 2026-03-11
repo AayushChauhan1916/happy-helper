@@ -91,7 +91,7 @@ export const SignUpPage = () => {
             role={role}
             setRole={setRole}
             onSubmit={handleSignupSubmit}
-            onGoogleLogin={startGoogleAuth}
+            onGoogleLogin={() => startGoogleAuth(role)}
             isGoogleLoading={isStartingGoogleAuth}
             isSubmitting={isSigningUp}
             submitError={submitError}
