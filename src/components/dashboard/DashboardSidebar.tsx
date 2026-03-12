@@ -14,6 +14,7 @@ import {
   SidebarFooter,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { APP_COPYRIGHT_YEAR, APP_NAME } from '@/constants/app';
 import { Link } from 'react-router-dom';
 import { NavLink } from '../navbar/Navlinks';
 
@@ -42,7 +43,7 @@ const DashboardSidebar = ({ items, role }: DashboardSidebarProps) => {
           </div>
           {!collapsed && (
             <span className="text-base font-bold tracking-tight text-foreground">
-              StayEase
+              {APP_NAME}
             </span>
           )}
         </Link>
@@ -83,7 +84,9 @@ const DashboardSidebar = ({ items, role }: DashboardSidebarProps) => {
 
       <SidebarFooter className="p-4">
         {!collapsed && (
-          <p className="text-[10px] text-muted-foreground">(c) 2026 StayEase</p>
+          <p className="text-[10px] text-muted-foreground">
+            (c) {APP_COPYRIGHT_YEAR} {APP_NAME}
+          </p>
         )}
       </SidebarFooter>
     </Sidebar>

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { hasAccessToken } from "@/lib/auth";
 import type { RootState } from "@/redux/app/store";
+import { APP_NAME } from "@/constants/app";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -37,7 +38,7 @@ const Navbar = () => {
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/20 transition-transform duration-200 group-hover:scale-105">
             <Building2 className="h-4.5 w-4.5 text-primary-foreground" />
           </div>
-          <span className="text-xl font-bold text-foreground tracking-tight">StayEase</span>
+          <span className="text-xl font-bold text-foreground tracking-tight">{APP_NAME}</span>
         </Link>
 
         <div className="hidden items-center gap-0.5 md:flex">

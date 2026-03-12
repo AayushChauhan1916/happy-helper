@@ -13,6 +13,7 @@ import { useGoogleAuthRedirect } from '@/hooks/use-google-auth-redirect';
 import { completeAuthSession } from '@/redux/features/auth/complete-auth-session';
 import type { AppDispatch } from '@/redux/app/store';
 import { useLoginMutation, useVerifyOtpMutation } from '@/redux/services/auth/auth.api';
+import { APP_NAME } from '@/constants/app';
 
 type Step = 'form' | 'otp';
 
@@ -86,7 +87,7 @@ export default function LoginPage() {
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary">
             <Building2 className="h-4.5 w-4.5 text-primary-foreground" />
           </div>
-          <span className="text-lg font-bold text-foreground">StayEase</span>
+          <span className="text-lg font-bold text-foreground">{APP_NAME}</span>
         </Link>
 
         {step === 'form' ? (

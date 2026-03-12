@@ -170,39 +170,39 @@
   --radius: 0.75rem;
 
   --background: 0 0% 100%;
-  --foreground: 217 33% 17%;
+  --foreground: 222 30% 14%;
 
   --card: 0 0% 100%;
-  --card-foreground: 217 33% 17%;
+  --card-foreground: 222 30% 14%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 217 33% 17%;
+  --popover-foreground: 222 30% 14%;
 
-  --primary: 199 89% 48%;
+  --primary: 173 68% 36%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 220 20% 96%;
-  --secondary-foreground: 217 33% 17%;
+  --secondary: 210 20% 96%;
+  --secondary-foreground: 222 30% 14%;
 
-  --muted: 220 16% 95%;
-  --muted-foreground: 215 16% 40%;
+  --muted: 210 18% 95%;
+  --muted-foreground: 215 14% 42%;
 
-  --accent: 210 28% 93%;
-  --accent-foreground: 199 88% 34%;
+  --accent: 171 34% 91%;
+  --accent-foreground: 172 66% 28%;
 
   --destructive: 0 72% 51%;
 
-  --border: 214 22% 86%;
-  --input: 214 22% 86%;
-  --ring: 199 89% 48%;
-  --sidebar: hsl(220 18% 93%);
-  --sidebar-foreground: hsl(217 28% 20%);
-  --sidebar-primary: hsl(199 89% 48%);
+  --border: 215 18% 88%;
+  --input: 215 18% 88%;
+  --ring: 173 68% 36%;
+  --sidebar: hsl(220 20% 96%);
+  --sidebar-foreground: hsl(222 28% 18%);
+  --sidebar-primary: hsl(173 68% 36%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(220 14% 88%);
-  --sidebar-accent-foreground: hsl(217 28% 20%);
-  --sidebar-border: hsl(214 22% 86%);
-  --sidebar-ring: hsl(199 89% 48%);
+  --sidebar-accent: hsl(216 18% 91%);
+  --sidebar-accent-foreground: hsl(222 28% 18%);
+  --sidebar-border: hsl(214 16% 84%);
+  --sidebar-ring: hsl(173 68% 36%);
 }
 
 .dark {
@@ -215,7 +215,7 @@
   --popover: 222 40% 10%;
   --popover-foreground: 240 10% 96%;
 
-  --primary: 252 56% 65%;
+  --primary: 172 60% 45%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 222 30% 16%;
@@ -224,14 +224,14 @@
   --muted: 222 30% 16%;
   --muted-foreground: 220 9% 55%;
 
-  --accent: 252 20% 18%;
-  --accent-foreground: 252 56% 70%;
+  --accent: 173 22% 20%;
+  --accent-foreground: 173 55% 74%;
 
   --destructive: 0 62% 40%;
 
   --border: 222 30% 18%;
   --input: 222 30% 18%;
-  --ring: 252 56% 65%;
+  --ring: 172 60% 45%;
   --sidebar: hsl(240 5.9% 10%);
   --sidebar-foreground: hsl(240 4.8% 95.9%);
   --sidebar-primary: hsl(224.3 76.3% 48%);
@@ -277,6 +277,94 @@
   50% {
     transform: translateY(8px);
     opacity: 0.9;
+  }
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(-16px) rotate(0deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(230px) rotate(340deg);
+    opacity: 0;
+  }
+}
+
+@keyframes checkPop {
+  0% {
+    transform: scale(0.5) rotate(-14deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12) rotate(3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes softPulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+}
+
+@keyframes ringReveal {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25);
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translateY(-4px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes checkDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes checkDrawLoop {
+  0% {
+    stroke-dashoffset: 40;
+  }
+  33.33% {
+    stroke-dashoffset: 0;
+  }
+  90% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 40;
   }
 }
 

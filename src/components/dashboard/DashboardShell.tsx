@@ -24,10 +24,8 @@ export default function DashboardShell({
       <DashboardSidebar items={items} role={roleLabel} />
       <SidebarInset className="bg-white">
         <TopNavbar userName={userName} userInitials={userInitials} />
-        <section className="flex-1 p-4 lg:p-6">
-          <div className="min-h-full rounded-2xl border border-border/70 bg-white p-4 lg:p-6">
-            {children ?? <Outlet />}
-          </div>
+        <section className="flex-1 bg-white p-4 lg:p-6">
+          <div className="min-h-full">{children ?? <Outlet />}</div>
         </section>
       </SidebarInset>
     </SidebarProvider>

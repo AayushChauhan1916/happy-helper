@@ -12,7 +12,11 @@ const propertyAddressSchema = z.object({
     .trim()
     .min(1, 'House number is required')
     .max(100, 'House number is too long'),
-  street: z.string().trim().max(200, 'Street is too long'),
+  street: z
+    .string()
+    .trim()
+    .min(1, 'Street is required')
+    .max(200, 'Street is too long'),
   landmark: z.string().trim().max(200, 'Landmark is too long').optional(),
   city: z.string().trim().min(1, 'City is required').max(100),
   state: z

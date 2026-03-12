@@ -1,12 +1,13 @@
 import { Star, Quote } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { APP_NAME } from "@/constants/app";
 
 const testimonials = [
   {
     name: "Rajesh Kumar",
     role: "PG Owner • Bangalore",
     initials: "RK",
-    quote: "StayEase transformed how I manage my 3 PG properties. Rent collection is now automated and I never miss a due date.",
+    quote: `${APP_NAME} transformed how I manage my 3 PG properties. Rent collection is now automated and I never miss a due date.`,
     color: "bg-violet-100 text-violet-700",
   },
   {
@@ -20,7 +21,7 @@ const testimonials = [
     name: "Amit Patel",
     role: "Property Manager • Pune",
     initials: "AP",
-    quote: "Managing 150+ tenants used to be a nightmare. StayEase made it incredibly simple with their intuitive interface.",
+    quote: `Managing 150+ tenants used to be a nightmare. ${APP_NAME} made it incredibly simple with their intuitive interface.`,
     color: "bg-amber-100 text-amber-700",
   },
 ];

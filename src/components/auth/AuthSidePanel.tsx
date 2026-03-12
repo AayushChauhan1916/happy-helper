@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 
 import { UserRole } from '@/types/common/roles';
+import { APP_NAME } from '@/constants/app';
 
 type AuthSidePanelProps = {
   role: UserRole;
@@ -90,7 +91,7 @@ const AuthSidePanel = ({ role, mode }: AuthSidePanelProps) => {
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 ring-1 ring-white/30">
             <Building2 className="h-5 w-5 text-white" />
           </div>
-          <span className="text-lg font-bold tracking-tight">StayEase</span>
+          <span className="text-lg font-bold tracking-tight">{APP_NAME}</span>
         </Link>
 
         <div className="max-w-[520px]">

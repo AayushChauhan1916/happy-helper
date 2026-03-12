@@ -22,7 +22,7 @@ const TopNavbar = ({
   userInitials = 'JD',
 }: TopNavbarProps) => {
   return (
-    <header className="flex h-14 items-center justify-between border-b border-border/80 bg-white/80 px-4 backdrop-blur-sm lg:px-6">
+    <header className="flex h-14 items-center justify-between border-b border-border/80 bg-white px-4 backdrop-blur-sm lg:px-6 sticky top-0">
       <div className="flex items-center gap-3">
         <SidebarTrigger className="-ml-1" />
         <div className="relative hidden md:block">

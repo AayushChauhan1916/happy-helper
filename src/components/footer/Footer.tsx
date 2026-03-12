@@ -1,5 +1,6 @@
-import { Building2 } from 'lucide-react';
+﻿import { Building2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { APP_COPYRIGHT_YEAR, APP_NAME } from '@/constants/app';
 
 const footerLinks = {
   Product: ['Features', 'Pricing', 'Integrations', 'Changelog'],
@@ -19,7 +20,7 @@ const Footer = () => {
                 <Building2 className="h-4 w-4 text-primary-foreground" />
               </div>
               <span className="text-lg font-bold text-foreground">
-                StayEase
+                {APP_NAME}
               </span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
@@ -51,7 +52,7 @@ const Footer = () => {
 
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-border/40 pt-8 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            © 2026 StayEase. All rights reserved.
+            (c) {APP_COPYRIGHT_YEAR} {APP_NAME}. All rights reserved.
           </p>
           <div className="flex gap-6">
             <a
@@ -80,3 +81,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { APP_NAME } from "@/constants/app";
 
 const CTABanner = () => {
   return (
@@ -17,7 +18,7 @@ const CTABanner = () => {
               Ready to modernize your PG?
             </h2>
             <p className="mb-8 text-base text-primary-foreground/70">
-              Join 500+ property owners who simplified their operations with StayEase.
+              Join 500+ property owners who simplified their operations with {APP_NAME}.
             </p>
             <Button
               size="lg"
