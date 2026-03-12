@@ -3,10 +3,10 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Building2, Loader2 } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import AuthSplitLayout from '@/components/auth/AuthSplitLayout';
-import { useGoogleLoginMutation } from '@/redux/features/auth/auth.api';
 import { UserRole } from '@/types/common/roles';
 import { completeAuthSession } from '@/redux/features/auth/complete-auth-session';
 import type { AppDispatch } from '@/redux/app/store';
+import { useGoogleLoginMutation } from '@/redux/services/auth/auth.api';
 
 export default function GoogleCallbackPage() {
   const navigate = useNavigate();
@@ -46,10 +46,9 @@ export default function GoogleCallbackPage() {
           data.data.accessToken,
           dispatch,
         );
-        navigate(redirectPath);
-      } catch (error) {
+        navigate(redirectPath, { replace: true });
+      } catch {
         sessionStorage.removeItem('authRole');
-        console.log(error, 'callback');
         navigate('/login?reason=google-auth-failed', {
           replace: true,
         });

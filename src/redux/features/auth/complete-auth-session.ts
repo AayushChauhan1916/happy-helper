@@ -1,7 +1,7 @@
-import { authApi } from './auth.api';
 import { clearUser, setUser, bootstrapStarted } from './auth.slice';
 import type { AppDispatch } from '@/redux/app/store';
 import { getDashboardPathByRole } from '@/lib/auth';
+import { authApi } from '@/redux/services/auth/auth.api';
 
 export async function completeAuthSession(
   accessToken: string,

@@ -6,10 +6,6 @@ import { useDispatch } from 'react-redux';
 import AuthSplitLayout from '@/components/auth/AuthSplitLayout';
 import OtpVerification from '@/components/auth/OtpVerification';
 import SignupForm from '@/components/signup/SignupForm';
-import {
-  useSignUpMutation,
-  useVerifyOtpMutation,
-} from '@/redux/features/auth/auth.api';
 import type { SignupFormData } from '@/schemas/auth/signup.schema';
 import { UserRole } from '@/types/common/roles';
 import {
@@ -20,6 +16,7 @@ import { getApiErrorMessage } from '@/lib/get-api-error-message';
 import { useGoogleAuthRedirect } from '@/hooks/use-google-auth-redirect';
 import { completeAuthSession } from '@/redux/features/auth/complete-auth-session';
 import type { AppDispatch } from '@/redux/app/store';
+import { useSignUpMutation, useVerifyOtpMutation } from '@/redux/services/auth/auth.api';
 
 type Step = 'form' | 'otp';
 

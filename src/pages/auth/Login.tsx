@@ -4,10 +4,6 @@ import { Building2 } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import AuthSplitLayout from '@/components/auth/AuthSplitLayout';
 import OtpVerification from '@/components/auth/OtpVerification';
-import {
-  useLoginMutation,
-  useVerifyOtpMutation,
-} from '@/redux/features/auth/auth.api';
 import type { LoginForm as LoginFormValues } from '@/schemas/auth/login.schema';
 import { UserRole } from '@/types/common/roles';
 import LoginForm from '@/components/login/LoginForm';
@@ -16,6 +12,7 @@ import { OtpPurpose } from '@/types/requests/auth/auth.requests';
 import { useGoogleAuthRedirect } from '@/hooks/use-google-auth-redirect';
 import { completeAuthSession } from '@/redux/features/auth/complete-auth-session';
 import type { AppDispatch } from '@/redux/app/store';
+import { useLoginMutation, useVerifyOtpMutation } from '@/redux/services/auth/auth.api';
 
 type Step = 'form' | 'otp';
 

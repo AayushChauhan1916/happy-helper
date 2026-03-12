@@ -24,7 +24,7 @@ export default function RoleGuard({ allowedRoles }: RoleGuardProps) {
 
   if (!user) {
     localStorage.removeItem('accessToken');
-    return <Navigate to="/login?reason=session-expired" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   if (!allowedRoles.includes(user.role)) {

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useMeQuery } from '@/redux/features/auth/auth.api';
 import {
   bootstrapFinished,
   bootstrapStarted,
@@ -9,6 +8,7 @@ import {
   setUser,
 } from '@/redux/features/auth/auth.slice';
 import { hasAccessToken } from '@/lib/auth';
+import { useMeQuery } from './redux/services/auth/auth.api';
 
 function App() {
   const dispatch = useDispatch();

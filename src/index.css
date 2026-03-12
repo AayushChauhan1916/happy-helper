@@ -169,7 +169,7 @@
 :root {
   --radius: 0.75rem;
 
-  --background: 210 33% 98%;
+  --background: 0 0% 100%;
   --foreground: 217 33% 17%;
 
   --card: 0 0% 100%;
@@ -181,13 +181,13 @@
   --primary: 199 89% 48%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 210 25% 95%;
+  --secondary: 220 20% 96%;
   --secondary-foreground: 217 33% 17%;
 
-  --muted: 210 22% 93%;
+  --muted: 220 16% 95%;
   --muted-foreground: 215 16% 40%;
 
-  --accent: 199 70% 92%;
+  --accent: 210 28% 93%;
   --accent-foreground: 199 88% 34%;
 
   --destructive: 0 72% 51%;
@@ -195,11 +195,11 @@
   --border: 214 22% 86%;
   --input: 214 22% 86%;
   --ring: 199 89% 48%;
-  --sidebar: hsl(210 30% 96%);
+  --sidebar: hsl(220 18% 93%);
   --sidebar-foreground: hsl(217 28% 20%);
   --sidebar-primary: hsl(199 89% 48%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(210 25% 91%);
+  --sidebar-accent: hsl(220 14% 88%);
   --sidebar-accent-foreground: hsl(217 28% 20%);
   --sidebar-border: hsl(214 22% 86%);
   --sidebar-ring: hsl(199 89% 48%);
@@ -265,6 +265,18 @@
   }
   75% {
     transform: translateX(-2px);
+  }
+}
+
+@keyframes rise {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 0.9;
   }
 }
 

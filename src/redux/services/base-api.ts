@@ -19,8 +19,6 @@ const rawBaseQuery = fetchBaseQuery({
 
   prepareHeaders: (headers) => {
     const token = localStorage.getItem('accessToken');
-
-    // Keep request-specific Authorization (e.g. Basic for login) untouched.
     if (token && !headers.has('Authorization')) {
       headers.set('Authorization', `Bearer ${token}`);
     }
