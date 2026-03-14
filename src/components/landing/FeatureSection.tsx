@@ -1,98 +1,108 @@
+import { motion } from 'framer-motion';
 import {
-  Users,
-  DoorOpen,
+  Building,
   CreditCard,
+  Bell,
+  ShieldCheck,
   BarChart3,
-  Shield,
-  Zap,
+  Users,
 } from 'lucide-react';
 
 const features = [
   {
-    icon: Users,
-    title: 'Tenant Management',
+    icon: Building,
+    title: 'Property Management',
     description:
-      'Onboard tenants digitally with documents, agreements, and move-in tracking.',
-    gradient: 'from-violet-500/10 to-purple-500/10',
-  },
-  {
-    icon: DoorOpen,
-    title: 'Smart Room Tracking',
-    description:
-      'Visual room & bed management. See availability at a glance across all properties.',
-    gradient: 'from-blue-500/10 to-cyan-500/10',
+      'Add, manage and track multiple properties with detailed analytics and occupancy monitoring.',
   },
   {
     icon: CreditCard,
-    title: 'Automated Payments',
+    title: 'Rent Collection',
     description:
-      'Auto-reminders, online collection, and instant digital receipts for tenants.',
-    gradient: 'from-emerald-500/10 to-teal-500/10',
+      'Automated rent tracking with online payment support, receipts, and overdue reminders.',
+  },
+  {
+    icon: Bell,
+    title: 'Smart Notifications',
+    description:
+      'Real-time alerts for payments, maintenance requests, lease renewals, and important updates.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Verified Listings',
+    description:
+      'Admin-verified property listings ensure trust and authenticity for all tenants.',
   },
   {
     icon: BarChart3,
     title: 'Revenue Analytics',
     description:
-      'Track occupancy trends, revenue growth, and tenant insights with real-time dashboards.',
-    gradient: 'from-amber-500/10 to-orange-500/10',
+      'Detailed financial reports, revenue trends, and expense tracking at your fingertips.',
   },
   {
-    icon: Shield,
-    title: 'Secure & Private',
+    icon: Users,
+    title: 'Role-Based Access',
     description:
-      'Bank-grade encryption for tenant data. Role-based access keeps everything safe.',
-    gradient: 'from-rose-500/10 to-pink-500/10',
-  },
-  {
-    icon: Zap,
-    title: 'Instant Notifications',
-    description:
-      'Automated alerts for rent dues, complaints, and property updates via SMS & email.',
-    gradient: 'from-indigo-500/10 to-violet-500/10',
+      'Dedicated dashboards for Admins, Owners, and Tenants with tailored functionality.',
   },
 ];
 
-const FeaturesSection = () => {
-  return (
-    <section id="features" className="py-28 bg-muted/30">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="mx-auto mb-16 max-w-2xl text-center">
-          <span className="mb-4 inline-block rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
-            FEATURES
-          </span>
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Everything you need,{' '}
-            <span className="text-primary">nothing you don't</span>
-          </h2>
-          <p className="text-muted-foreground">
-            Purpose-built tools for modern PG management — simple, powerful, and
-            delightful to use.
-          </p>
-        </div>
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1 } },
+};
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
+export default function FeaturesSection() {
+  return (
+    <section id="features" className="py-24 md:py-32 bg-muted/30">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center max-w-2xl mx-auto mb-16"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+            Features
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+            Everything You Need to Manage Properties
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            A comprehensive suite of tools designed for modern property
+            management.
+          </p>
+        </motion.div>
+
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
           {features.map((feature) => (
-            <div
+            <motion.div
               key={feature.title}
-              className="group relative rounded-2xl border border-border/40 bg-card p-6 transition-all duration-300 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5"
+              variants={item}
+              className="group relative rounded-2xl border border-border bg-card p-6 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1"
             >
-              <div
-                className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient}`}
-              >
-                <feature.icon className="h-6 w-6 text-primary" />
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <feature.icon className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="mb-2 text-base font-semibold text-foreground">
-                {feature.title}
-              </h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">
+              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 {feature.description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
-};
-
-export default FeaturesSection;
+}

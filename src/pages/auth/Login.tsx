@@ -24,7 +24,7 @@ export default function LoginPage() {
 
   const reason = searchParams.get('reason');
   const [step, setStep] = useState<Step>('form');
-  const [role, setRole] = useState<UserRole>(UserRole.TENANT);
+  const role = UserRole.TENANT;
   const [emailForOtp, setEmailForOtp] = useState('');
   const [login] = useLoginMutation();
   const [verifyOtp] = useVerifyOtpMutation();
@@ -95,8 +95,6 @@ export default function LoginPage() {
             onSubmit={onSubmit}
             onGoogleLogin={() => startGoogleAuth(role)}
             isGoogleLoading={isStartingGoogleAuth}
-            selectedRole={role}
-            onRoleChange={setRole}
             sessionExpired={sessionExpired}
             authNotice={authNotice}
           />

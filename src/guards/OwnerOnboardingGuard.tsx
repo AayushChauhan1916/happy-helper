@@ -23,7 +23,7 @@ export default function OwnerOnboardingGuard({
     return <Navigate to="/login" replace />;
   }
 
-  const isOwnerOnboardingCompleted = Boolean(user.isOwnerOnboardingCompleted);
+  const isOwnerOnboardingCompleted = Boolean(user.isOnboarded);
 
   if (mode === 'require_onboarding' && isOwnerOnboardingCompleted) {
     return <Navigate to="/owner" replace />;

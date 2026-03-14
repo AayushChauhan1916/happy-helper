@@ -30,21 +30,26 @@ interface DashboardSidebarProps {
 }
 
 const DashboardSidebar = ({ items, role }: DashboardSidebarProps) => {
-  const { state } = useSidebar();
+  const { state, isMobile } = useSidebar();
   const collapsed = state === 'collapsed';
   const location = useLocation();
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="p-4">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary">
+      <SidebarHeader className="p-4 pt-5">
+        <Link to="/" className="flex items-center gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary shadow-sm">
             <Building2 className="h-4 w-4 text-primary-foreground" />
           </div>
           {!collapsed && (
-            <span className="text-base font-bold tracking-tight text-foreground">
-              {APP_NAME}
-            </span>
+            <div className="min-w-0">
+              <span className="block truncate text-base font-bold tracking-tight text-sidebar-foreground">
+                {APP_NAME}
+              </span>
+              <span className="block text-[11px] uppercase tracking-[0.2em] text-sidebar-foreground/55">
+                {role}
+              </span>
+            </div>
           )}
         </Link>
       </SidebarHeader>
@@ -52,8 +57,8 @@ const DashboardSidebar = ({ items, role }: DashboardSidebarProps) => {
       <SidebarContent>
         <SidebarGroup>
           {!collapsed && (
-            <SidebarGroupLabel className="text-[10px] uppercase tracking-widest text-muted-foreground px-3">
-              {role}
+            <SidebarGroupLabel className="px-3 text-[10px] uppercase tracking-widest text-sidebar-foreground/45">
+              Navigation
             </SidebarGroupLabel>
           )}
           <SidebarGroupContent>
@@ -63,13 +68,14 @@ const DashboardSidebar = ({ items, role }: DashboardSidebarProps) => {
                   <SidebarMenuButton
                     asChild
                     isActive={location.pathname === item.url}
+                    size={isMobile ? 'lg' : 'default'}
                     tooltip={item.title}
                   >
                     <NavLink
                       to={item.url}
                       end
-                      className="rounded-lg hover:bg-sidebar-accent/80"
-                      activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium"
+                      className="rounded-xl hover:bg-sidebar-accent/80"
+                      activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-medium shadow-sm"
                     >
                       <item.icon className="h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
@@ -84,7 +90,7 @@ const DashboardSidebar = ({ items, role }: DashboardSidebarProps) => {
 
       <SidebarFooter className="p-4">
         {!collapsed && (
-          <p className="text-[10px] text-muted-foreground">
+          <p className="text-[10px] text-sidebar-foreground/45">
             (c) {APP_COPYRIGHT_YEAR} {APP_NAME}
           </p>
         )}

@@ -187,7 +187,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
+          className="w-(--sidebar-width) border-r border-sidebar-border/80 bg-sidebar/95 p-0 text-sidebar-foreground shadow-[0_24px_80px_rgba(15,23,42,0.42)] backdrop-blur-xl [&>button]:right-3 [&>button]:top-3 [&>button]:rounded-xl [&>button]:border [&>button]:border-sidebar-border/70 [&>button]:bg-sidebar-accent/90 [&>button]:p-2 [&>button]:text-sidebar-foreground [&>button]:opacity-100"
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -266,7 +266,7 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn("size-7", className)}
+      className={cn("size-7 transition-all duration-200 ease-out", className)}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()

@@ -1,76 +1,85 @@
-import { Star, Quote } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { APP_NAME } from "@/constants/app";
+import { motion } from 'framer-motion';
+import { Star } from 'lucide-react';
 
 const testimonials = [
   {
-    name: "Rajesh Kumar",
-    role: "PG Owner • Bangalore",
-    initials: "RK",
-    quote: `${APP_NAME} transformed how I manage my 3 PG properties. Rent collection is now automated and I never miss a due date.`,
-    color: "bg-violet-100 text-violet-700",
+    name: 'Rajesh Kumar',
+    role: 'Property Owner',
+    content:
+      'NIVAS HUB transformed how I manage my 15 properties. Rent collection is now automated and I save hours every month.',
+    rating: 5,
   },
   {
-    name: "Priya Sharma",
-    role: "PG Owner • Mumbai",
-    initials: "PS",
-    quote: "The analytics dashboard gives me instant visibility into occupancy rates. I've increased my revenue by 20% since switching.",
-    color: "bg-emerald-100 text-emerald-700",
+    name: 'Priya Sharma',
+    role: 'Tenant',
+    content:
+      'Finding a verified rental was so easy. The maintenance request system is fantastic — issues get resolved quickly.',
+    rating: 5,
   },
   {
-    name: "Amit Patel",
-    role: "Property Manager • Pune",
-    initials: "AP",
-    quote: `Managing 150+ tenants used to be a nightmare. ${APP_NAME} made it incredibly simple with their intuitive interface.`,
-    color: "bg-amber-100 text-amber-700",
+    name: 'Amit Patel',
+    role: 'Property Owner',
+    content:
+      'The analytics dashboard gives me clear visibility into my portfolio performance. Highly recommend for serious landlords.',
+    rating: 5,
   },
 ];
 
-const Testimonials = () => {
+export default function Testimonials() {
   return (
-    <section id="testimonials" className="py-28 bg-muted/30">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="mx-auto mb-16 max-w-2xl text-center">
-          <span className="mb-4 inline-block rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
-            TESTIMONIALS
-          </span>
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Loved by PG owners <span className="text-primary">everywhere</span>
+    <section id="testimonials" className="py-24 md:py-32 bg-muted/30">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center max-w-2xl mx-auto mb-16"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
+            Testimonials
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+            Loved by Property Managers
           </h2>
-        </div>
+          <p className="text-muted-foreground text-lg">
+            See what our users have to say about their experience.
+          </p>
+        </motion.div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {testimonials.map((t) => (
-            <div
+        <div className="grid md:grid-cols-3 gap-6">
+          {testimonials.map((t, i) => (
+            <motion.div
               key={t.name}
-              className="relative rounded-2xl border border-border/40 bg-card p-6 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="rounded-2xl border border-border bg-card p-6"
             >
-              <Quote className="absolute top-6 right-6 h-8 w-8 text-muted/60" />
-              <div className="mb-4 flex gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-warning text-warning" />
+              <div className="flex gap-1 mb-4">
+                {Array.from({ length: t.rating }).map((_, j) => (
+                  <Star key={j} className="w-4 h-4 fill-accent text-accent" />
                 ))}
               </div>
-              <p className="mb-6 text-sm leading-relaxed text-muted-foreground">
-                "{t.quote}"
+              <p className="text-foreground mb-6 leading-relaxed">
+                "{t.content}"
               </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-border/40">
-                <Avatar className="h-10 w-10">
-                  <AvatarFallback className={`text-xs font-bold ${t.color}`}>
-                    {t.initials}
-                  </AvatarFallback>
-                </Avatar>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm">
+                  {t.name
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')}
+                </div>
                 <div>
-                  <p className="text-sm font-semibold text-foreground">{t.name}</p>
-                  <p className="text-xs text-muted-foreground">{t.role}</p>
+                  <div className="font-semibold text-sm">{t.name}</div>
+                  <div className="text-xs text-muted-foreground">{t.role}</div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
     </section>
   );
-};
-
-export default Testimonials;
+}

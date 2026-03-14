@@ -1,39 +1,48 @@
-import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { APP_NAME } from "@/constants/app";
+import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
-const CTABanner = () => {
+export default function CTABanner() {
   return (
-    <section className="py-28">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary/90 to-primary/80 px-8 py-20 text-center">
-          {/* Decorative */}
-          <div className="absolute -top-32 -left-32 h-64 w-64 rounded-full bg-primary-foreground/5 blur-3xl" />
-          <div className="absolute -bottom-32 -right-32 h-80 w-80 rounded-full bg-primary-foreground/5 blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-primary-foreground/3 blur-3xl" />
+    <section className="py-24 md:py-32">
+      <div className="container mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="relative rounded-3xl bg-primary p-12 md:p-16 text-center overflow-hidden"
+        >
+          <div
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 50%, white 1px, transparent 1px)',
+              backgroundSize: '60px 60px',
+            }}
+          />
 
-          <div className="relative z-10 mx-auto max-w-lg">
-            <h2 className="mb-4 text-3xl font-bold text-primary-foreground sm:text-4xl">
-              Ready to modernize your PG?
+          <div className="relative z-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4 tracking-tight">
+              Ready to Simplify Property Management?
             </h2>
-            <p className="mb-8 text-base text-primary-foreground/70">
-              Join 500+ property owners who simplified their operations with {APP_NAME}.
+            <p className="text-primary-foreground/80 text-lg max-w-xl mx-auto mb-8">
+              Join thousands of property owners and tenants who trust NIVAS HUB
+              for seamless property management.
             </p>
             <Button
               size="lg"
-              className="h-12 gap-2 rounded-xl bg-primary-foreground px-8 text-base text-primary hover:bg-primary-foreground/90 shadow-xl"
+              variant="secondary"
+              className="text-base px-8 gap-2"
               asChild
             >
-              <Link to="/login">
-                Get Started Free <ArrowRight className="h-4 w-4" />
+              <Link to="/signup">
+                Get Started Free <ArrowRight className="w-4 h-4" />
               </Link>
             </Button>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
-};
-
-export default CTABanner;
+}

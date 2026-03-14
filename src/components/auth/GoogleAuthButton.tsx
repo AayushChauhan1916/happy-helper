@@ -3,13 +3,18 @@ import { Button } from '@/components/ui/button';
 type GoogleAuthButtonProps = {
   onClick: () => void;
   disabled?: boolean;
+  label?: string;
 };
 
-const GoogleAuthButton = ({ onClick, disabled }: GoogleAuthButtonProps) => {
+const GoogleAuthButton = ({
+  onClick,
+  disabled,
+  label = 'Continue with Google',
+}: GoogleAuthButtonProps) => {
   return (
     <Button
       variant="outline"
-      className="h-11 w-full gap-2.5 rounded-xl"
+      className="h-12 w-full gap-2.5 rounded-xl border-border/70 bg-background"
       size="lg"
       onClick={onClick}
       disabled={disabled}
@@ -32,7 +37,7 @@ const GoogleAuthButton = ({ onClick, disabled }: GoogleAuthButtonProps) => {
           fill="#EA4335"
         />
       </svg>
-      {disabled ? 'Redirecting...' : 'Continue with Google'}
+      {disabled ? 'Redirecting...' : label}
     </Button>
   );
 };

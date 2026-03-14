@@ -39,9 +39,7 @@ export const SignUpPage = () => {
     setSubmitError('');
 
     const payload: SignUpRequest = {
-      fullName: data.fullName.trim(),
       email: data.email.trim(),
-      phoneNumber: `${data.countryCode}${data.phoneNumber.trim()}`,
       password: data.password,
       role,
     };

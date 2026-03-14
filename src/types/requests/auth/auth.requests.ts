@@ -1,10 +1,12 @@
 import type { UserRole } from '@/types/common/roles';
 
-export enum OtpPurpose {
-  SIGNUP_VERIFICATION = 'signup_verification',
-  LOGIN_VERIFICATION = 'login_verifcation',
-  RESET_PASSWORD = 'reset_password',
-}
+export const OtpPurpose = {
+  SIGNUP_VERIFICATION: 'signup_verification',
+  LOGIN_VERIFICATION: 'login_verifcation',
+  RESET_PASSWORD: 'reset_password',
+} as const;
+
+export type OtpPurpose = (typeof OtpPurpose)[keyof typeof OtpPurpose];
 
 export interface LoginRequest {
   email: string;
@@ -24,9 +26,7 @@ export interface GoogleLoginRequest {
 }
 
 export interface SignUpRequest {
-  fullName: string;
   email: string;
-  phoneNumber: string;
   password: string;
   role: UserRole;
 }
