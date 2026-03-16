@@ -11,7 +11,6 @@ import {
   Pencil,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import {
   MOCK_PROPERTIES,
   MOCK_ROOMS,
@@ -19,6 +18,7 @@ import {
 } from '@/data/mock-properties';
 import type { Room } from '@/types/property.types';
 import { FOOD_PLAN_LABELS, AMENITY_OPTIONS } from '@/types/property.types';
+import { Badge } from '@/components/ui/badge';
 
 export default function PropertyDetailsPage() {
   const { propertyId } = useParams<{ propertyId: string }>();
