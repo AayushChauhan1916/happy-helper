@@ -1,5 +1,3 @@
-/* ── Shared property / room / bed types ── */
-
 export interface PropertyAddress {
   houseNumber: string;
   street: string;

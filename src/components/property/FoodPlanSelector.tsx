@@ -1,7 +1,7 @@
 import { UtensilsCrossed } from 'lucide-react';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { FOOD_PLAN_LABELS, type FoodPlan } from '@/types/property.types';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
 interface FoodPlanSelectorProps {
   value: FoodPlan;
