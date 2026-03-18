@@ -16,7 +16,10 @@ import { getApiErrorMessage } from '@/lib/get-api-error-message';
 import { useGoogleAuthRedirect } from '@/hooks/use-google-auth-redirect';
 import { completeAuthSession } from '@/redux/features/auth/complete-auth-session';
 import type { AppDispatch } from '@/redux/app/store';
-import { useSignUpMutation, useVerifyOtpMutation } from '@/redux/services/auth/auth.api';
+import {
+  useSignUpMutation,
+  useVerifyOtpMutation,
+} from '@/redux/services/auth/auth.api';
 import { APP_NAME } from '@/constants/app';
 
 type Step = 'form' | 'otp';

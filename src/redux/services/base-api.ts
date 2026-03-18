@@ -14,7 +14,7 @@ const AUTH_SKIP_ROUTES = [
 ];
 
 const rawBaseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:3000/api',
+  baseUrl: import.meta.env.VITE_API_URL as string,
   credentials: 'include',
 
   prepareHeaders: (headers) => {
@@ -33,9 +33,7 @@ const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   let result = await rawBaseQuery(args, api, extraOptions);
   const url = typeof args === 'string' ? args : (args.url ?? '');
-  const skipRefresh = AUTH_SKIP_ROUTES.some((route) =>
-    url.startsWith(route),
-  );
+  const skipRefresh = AUTH_SKIP_ROUTES.some((route) => url.startsWith(route));
   if (result.error && result.error.status === 401 && !skipRefresh) {
     const refreshResult = await rawBaseQuery(
       {
