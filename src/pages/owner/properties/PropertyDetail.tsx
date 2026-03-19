@@ -1,21 +1,19 @@
-import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
   BedDouble,
-  Building2,
   MapPin,
   Phone,
   Plus,
   Pencil,
 } from 'lucide-react';
+import AuthRouteLoader from '@/components/auth/AuthRouteLoader';
+import PropertyPageState from '@/components/property/PropertyPageState';
 import { Button } from '@/components/ui/button';
-import {
-  MOCK_PROPERTIES,
-  MOCK_ROOMS,
-  formatRupee,
-} from '@/data/mock-properties';
+import { formatRupee, MOCK_ROOMS } from '@/data/mock-properties';
+import { getApiErrorMessage } from '@/lib/get-api-error-message';
+import { useGetPropertyByIdQuery } from '@/redux/services/property/property.api';
 import type { Room } from '@/types/property.types';
 import { FOOD_PLAN_LABELS, AMENITY_OPTIONS } from '@/types/property.types';
 import { Badge } from '@/components/ui/badge';
@@ -23,27 +21,62 @@ import { Badge } from '@/components/ui/badge';
 export default function PropertyDetailsPage() {
   const { propertyId } = useParams<{ propertyId: string }>();
   const navigate = useNavigate();
+  const {
+    data: propertyResponse,
+    isLoading,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useGetPropertyByIdQuery(propertyId ?? '', {
+    skip: !propertyId,
+  });
+  const property = propertyResponse?.data;
 
-  const property = MOCK_PROPERTIES.find((p) => p.id === propertyId);
-  const [rooms] = useState<Room[]>(
-    MOCK_ROOMS.filter((r) => r.propertyId === propertyId),
-  );
+  const rooms: Room[] = propertyId
+    ? MOCK_ROOMS.filter((r) => r.propertyId === propertyId)
+    : [];
+
+  if (!propertyId) {
+    return (
+      <PropertyPageState
+        variant="error"
+        title="Property not found"
+        description="The property identifier is missing from the URL."
+        actionLabel="Back to Properties"
+        onAction={() => navigate('/owner/properties')}
+      />
+    );
+  }
+
+  if (isLoading) {
+    return <AuthRouteLoader message="Loading property details..." />;
+  }
+
+  if (isError) {
+    return (
+      <PropertyPageState
+        variant="error"
+        title="Unable to load property"
+        description={getApiErrorMessage(
+          error,
+          'We could not fetch this property right now. Please try again.',
+        )}
+        actionLabel="Try Again"
+        onAction={refetch}
+      />
+    );
+  }
 
   if (!property) {
     return (
-      <div className="flex min-h-[40vh] flex-col items-center justify-center text-center">
-        <Building2 className="h-12 w-12 text-muted-foreground/40 mb-4" />
-        <h2 className="text-lg font-semibold text-foreground">
-          Property not found
-        </h2>
-        <Button
-          variant="outline"
-          onClick={() => navigate('/owner/properties')}
-          className="mt-4 gap-2 rounded-xl"
-        >
-          <ArrowLeft className="h-4 w-4" /> Back to Properties
-        </Button>
-      </div>
+      <PropertyPageState
+        variant="error"
+        title="Property not found"
+        description="This property does not exist or you do not have access to it."
+        actionLabel="Back to Properties"
+        onAction={() => navigate('/owner/properties')}
+      />
     );
   }
 
@@ -91,13 +124,18 @@ export default function PropertyDetailsPage() {
               <Pencil className="h-3.5 w-3.5" /> Edit Property
             </Button>
           </div>
+          {isFetching ? (
+            <p className="text-xs text-muted-foreground">
+              Refreshing property details...
+            </p>
+          ) : null}
 
           {/* Quick stats */}
           <div className="flex flex-wrap gap-3 pt-1">
             <div className="rounded-xl bg-muted/40 px-4 py-2">
               <span className="text-xs text-muted-foreground">Rooms</span>
               <p className="text-lg font-bold text-foreground">
-                {rooms.length}
+                {property.totalRooms}
               </p>
             </div>
             <div className="rounded-xl bg-muted/40 px-4 py-2">
@@ -109,7 +147,7 @@ export default function PropertyDetailsPage() {
             <div className="rounded-xl bg-muted/40 px-4 py-2">
               <span className="text-xs text-muted-foreground">Occupied</span>
               <p className="text-lg font-bold text-foreground">
-                {property.occupiedBeds}
+                {property.occupiedBeds ?? 0}
               </p>
             </div>
           </div>

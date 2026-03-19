@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
   Building2,
   CheckCircle2,
-  ChevronsUpDown,
   Loader2,
   User,
 } from 'lucide-react';
@@ -16,7 +15,7 @@ import { useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PhoneInput } from '@/components/ui/phone-input';
-import { Textarea } from '@/components/ui/textarea';
+import PropertyDetailsForm from '@/components/property/PropertyDetailsForm';
 import {
   Form,
   FormControl,
@@ -25,15 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  INDIA_COUNTRY,
-  INDIAN_STATES_AND_UTS,
-} from '@/constants/india-address';
+import { INDIA_COUNTRY } from '@/constants/india-address';
 import {
   ownerOnboardingSchema,
   type OwnerOnboardingFormData,
@@ -55,8 +46,6 @@ const OwnerOnboardingPage = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const [step, setStep] = useState<OnboardingStep>('personal');
   const [submitError, setSubmitError] = useState('');
-  const [stateSearch, setStateSearch] = useState('');
-  const [stateOpen, setStateOpen] = useState(false);
   const [submitOwnerOnboarding, { isLoading: isSubmitting }] =
     useSubmitOwnerOnboardingMutation();
 
@@ -94,14 +83,6 @@ const OwnerOnboardingPage = () => {
       });
     }
   }, [form, user?.fullName, user?.phoneNumber]);
-
-  const filteredStates = useMemo(
-    () =>
-      INDIAN_STATES_AND_UTS.filter((state) =>
-        state.toLowerCase().includes(stateSearch.toLowerCase().trim()),
-      ),
-    [stateSearch],
-  );
 
   const values = form.watch();
   const watchedPhoneNumber = values.phoneNumber;
@@ -305,260 +286,61 @@ const OwnerOnboardingPage = () => {
 
           {step === 'property' && (
             <form className="space-y-4">
-              <div className="space-y-1">
-                <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-                  Add Your Property
-                </h1>
-                <p className="text-sm text-muted-foreground">
-                  Enter your property details to continue onboarding.
-                </p>
-              </div>
-
-              <FormField
-                control={form.control}
-                name="property.name"
-                render={({ field }) => (
-                  <FormItem className="space-y-1">
-                    <FormLabel>Property Name</FormLabel>
-                    <FormControl>
-                      <Input className="h-10" placeholder="Green View PG" {...field} />
-                    </FormControl>
-                    <div className="h-4">
-                      <FormMessage className="text-[11px] leading-4" />
-                    </div>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="property.contactNumber"
-                render={({ field }) => (
-                  <FormItem className="space-y-1">
-                    <FormLabel>Contact Number</FormLabel>
-                    <FormControl>
-                      <PhoneInput
-                        className="h-12"
-                        classNames={{
-                          root: 'border-border/70 shadow-none',
-                          countryButton:
-                            'bg-muted/25 text-foreground hover:bg-muted/40',
-                          input: 'text-sm',
-                        }}
-                        placeholder="9876543210"
-                        {...field}
-                      />
-                    </FormControl>
-                    <div className="h-4">
-                      <FormMessage className="text-[11px] leading-4" />
-                    </div>
-                  </FormItem>
-                )}
-              />
-
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="property.address.houseNumber"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel>House Number</FormLabel>
-                      <FormControl>
-                        <Input className="h-10" placeholder="12A" {...field} />
-                      </FormControl>
-                      <div className="h-4">
-                        <FormMessage className="text-[11px] leading-4" />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="property.address.street"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel>Street</FormLabel>
-                      <FormControl>
-                        <Input className="h-10" placeholder="MG Road" {...field} />
-                      </FormControl>
-                      <div className="h-4">
-                        <FormMessage className="text-[11px] leading-4" />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <FormField
-                control={form.control}
-                name="property.address.landmark"
-                render={({ field }) => (
-                  <FormItem className="space-y-1">
-                    <FormLabel>Landmark (Optional)</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="h-10"
-                        placeholder="Opposite City Mall"
-                        {...field}
-                        value={field.value ?? ''}
-                      />
-                    </FormControl>
-                    <div className="h-4">
-                      <FormMessage className="text-[11px] leading-4" />
-                    </div>
-                  </FormItem>
-                )}
-              />
-
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="property.address.city"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel>City</FormLabel>
-                      <FormControl>
-                        <Input className="h-10" placeholder="Bengaluru" {...field} />
-                      </FormControl>
-                      <div className="h-4">
-                        <FormMessage className="text-[11px] leading-4" />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="property.address.pincode"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel>Pincode</FormLabel>
-                      <FormControl>
-                        <Input
-                          className="h-10"
-                          placeholder="560001"
-                          maxLength={6}
-                          {...field}
-                          onChange={(event) =>
-                            field.onChange(
-                              event.target.value.replace(/\D/g, '').slice(0, 6),
-                            )
-                          }
-                        />
-                      </FormControl>
-                      <div className="h-4">
-                        <FormMessage className="text-[11px] leading-4" />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="property.address.state"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel>State</FormLabel>
-                      <Popover open={stateOpen} onOpenChange={setStateOpen}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            className="h-10 w-full justify-between font-normal"
-                          >
-                            <span className="truncate">
-                              {field.value || 'Select state'}
-                            </span>
-                            <ChevronsUpDown className="h-4 w-4 text-muted-foreground" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent
-                          align="start"
-                          sideOffset={6}
-                          className="w-[var(--radix-popover-trigger-width)] p-2"
-                        >
-                          <Input
-                            placeholder="Search state..."
-                            value={stateSearch}
-                            onChange={(event) => setStateSearch(event.target.value)}
-                            className="mb-2 h-9"
-                          />
-                          <div className="max-h-56 overflow-y-auto">
-                            {filteredStates.map((state) => (
-                              <button
-                                key={state}
-                                type="button"
-                                onClick={() => {
-                                  form.setValue('property.address.state', state, {
-                                    shouldValidate: true,
-                                  });
-                                  setStateOpen(false);
-                                  setStateSearch('');
-                                }}
-                                className="w-full rounded-md px-2 py-2 text-left text-sm hover:bg-muted"
-                              >
-                                {state}
-                              </button>
-                            ))}
-                            {filteredStates.length === 0 && (
-                              <p className="px-2 py-2 text-xs text-muted-foreground">
-                                No state found
-                              </p>
-                            )}
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                      <div className="h-4">
-                        <FormMessage className="text-[11px] leading-4" />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="property.address.country"
-                  render={({ field }) => (
-                    <FormItem className="space-y-1">
-                      <FormLabel>Country</FormLabel>
-                      <FormControl>
-                        <Input
-                          className="h-10 bg-muted/30"
-                          readOnly
-                          {...field}
-                          value={INDIA_COUNTRY}
-                        />
-                      </FormControl>
-                      <div className="h-4">
-                        <FormMessage className="text-[11px] leading-4" />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <FormField
-                control={form.control}
-                name="property.description"
-                render={({ field }) => (
-                  <FormItem className="space-y-1">
-                    <FormLabel>Description (Optional)</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className="min-h-[86px] resize-none"
-                        placeholder="Near metro station"
-                        {...field}
-                        value={field.value ?? ''}
-                      />
-                    </FormControl>
-                    <div className="h-4">
-                      <FormMessage className="text-[11px] leading-4" />
-                    </div>
-                  </FormItem>
-                )}
+              <PropertyDetailsForm
+                value={{
+                  name: values.property.name,
+                  contactNumber: values.property.contactNumber,
+                  description: values.property.description ?? '',
+                  address: {
+                    ...values.property.address,
+                    landmark: values.property.address.landmark ?? '',
+                    country: values.property.address.country ?? INDIA_COUNTRY,
+                  },
+                }}
+                onChange={(propertyValue) => {
+                  form.setValue('property.name', propertyValue.name, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+                  form.setValue('property.contactNumber', propertyValue.contactNumber, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+                  form.setValue('property.description', propertyValue.description, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+                  form.setValue('property.address', propertyValue.address, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+                }}
+                description="Enter your property details to continue onboarding."
+                errors={{
+                  name: form.formState.errors.property?.name?.message,
+                  contactNumber:
+                    form.formState.errors.property?.contactNumber?.message,
+                  description:
+                    form.formState.errors.property?.description?.message,
+                  address: {
+                    houseNumber:
+                      form.formState.errors.property?.address?.houseNumber
+                        ?.message,
+                    street:
+                      form.formState.errors.property?.address?.street?.message,
+                    landmark:
+                      form.formState.errors.property?.address?.landmark
+                        ?.message,
+                    city:
+                      form.formState.errors.property?.address?.city?.message,
+                    state:
+                      form.formState.errors.property?.address?.state?.message,
+                    pincode:
+                      form.formState.errors.property?.address?.pincode?.message,
+                    country:
+                      form.formState.errors.property?.address?.country?.message,
+                  },
+                }}
               />
 
               <div className="flex items-center justify-between pt-1">

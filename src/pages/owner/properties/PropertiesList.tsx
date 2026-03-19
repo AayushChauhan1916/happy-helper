@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
@@ -9,17 +8,44 @@ import {
   ArrowRight,
   Settings,
 } from 'lucide-react';
+import AuthRouteLoader from '@/components/auth/AuthRouteLoader';
+import PropertyPageState from '@/components/property/PropertyPageState';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MOCK_PROPERTIES, MOCK_ROOMS } from '@/data/mock-properties';
-import type { Property } from '@/types/property.types';
+import { getApiErrorMessage } from '@/lib/get-api-error-message';
+import { useGetMyPropertiesQuery } from '@/redux/services/property/property.api';
+import type { PropertyApiEntity } from '@/types/responses/property/property.responses';
 
 export default function PropertiesListPage() {
   const navigate = useNavigate();
-  const [properties] = useState<Property[]>(MOCK_PROPERTIES);
+  const {
+    data: propertiesResponse,
+    isLoading,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useGetMyPropertiesQuery();
+  const properties = propertiesResponse?.data ?? [];
 
-  const getRoomCount = (propertyId: string) =>
-    MOCK_ROOMS.filter((r) => r.propertyId === propertyId).length;
+  if (isLoading) {
+    return <AuthRouteLoader message="Loading your properties..." />;
+  }
+
+  if (isError) {
+    return (
+      <PropertyPageState
+        variant="error"
+        title="Unable to load properties"
+        description={getApiErrorMessage(
+          error,
+          'We could not fetch your properties right now. Please try again.',
+        )}
+        actionLabel="Try Again"
+        onAction={refetch}
+      />
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -46,38 +72,33 @@ export default function PropertiesListPage() {
           </Button>
         </div>
       </section>
+      {isFetching ? (
+        <p className="text-sm text-muted-foreground">
+          Refreshing properties...
+        </p>
+      ) : null}
 
       {/* Properties Grid */}
       {properties.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/70 bg-muted/20 py-20 text-center">
-          <div className="mb-4 rounded-2xl bg-primary/10 p-5 text-primary">
-            <Building2 className="h-10 w-10" />
-          </div>
-          <h2 className="text-lg font-semibold text-foreground">
-            No properties yet
-          </h2>
-          <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-            Add your first PG property to start managing rooms and tenants.
-          </p>
-          <Button
-            onClick={() => navigate('/owner/properties/add')}
-            className="mt-6 gap-2 rounded-xl"
-          >
-            <Plus className="h-4 w-4" /> Add Your First Property
-          </Button>
-        </div>
+        <PropertyPageState
+          title="No properties yet"
+          description="Add your first PG property to start managing rooms and tenants."
+          actionLabel="Add Your First Property"
+          onAction={() => navigate('/owner/properties/add')}
+        />
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {properties.map((property, idx) => {
-            const roomCount = getRoomCount(property.id);
+          {properties.map((property: PropertyApiEntity, idx: number) => {
             const occupancyPercent =
               property.totalBeds > 0
-                ? Math.round((property.occupiedBeds / property.totalBeds) * 100)
+                ? Math.round(
+                    ((property.occupiedBeds ?? 0) / property.totalBeds) * 100,
+                  )
                 : 0;
 
             return (
               <motion.div
-                key={property.id}
+                key={property._id}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.08 }}
@@ -109,7 +130,7 @@ export default function PropertiesListPage() {
                   <div className="grid grid-cols-3 gap-3">
                     <div className="rounded-xl bg-muted/40 px-3 py-2.5 text-center">
                       <p className="text-lg font-bold text-foreground">
-                        {roomCount}
+                        {property.totalRooms}
                       </p>
                       <p className="text-[10px] text-muted-foreground">Rooms</p>
                     </div>
@@ -143,7 +164,7 @@ export default function PropertiesListPage() {
                               : 'bg-red-100 text-red-600'
                         }`}
                       >
-                        {property.occupiedBeds}/{property.totalBeds} beds
+                        {property.occupiedBeds ?? 0}/{property.totalBeds} beds
                       </Badge>
                     </div>
                     <div className="h-2 rounded-full bg-muted">
@@ -161,7 +182,7 @@ export default function PropertiesListPage() {
                       size="sm"
                       className="flex-1 gap-1.5 rounded-xl text-xs"
                       onClick={() =>
-                        navigate(`/owner/properties/${property.id}/details`)
+                        navigate(`/owner/properties/${property._id}/details`)
                       }
                     >
                       <BedDouble className="h-3.5 w-3.5" />
@@ -173,7 +194,7 @@ export default function PropertiesListPage() {
                       size="icon-sm"
                       className="rounded-xl"
                       onClick={() =>
-                        navigate(`/owner/properties/${property.id}/details`)
+                        navigate(`/owner/properties/${property._id}/details`)
                       }
                     >
                       <Settings className="h-3.5 w-3.5" />

@@ -1,5 +1,6 @@
 import type { ApiResponse } from '@/types/common/IApiResponse';
 import type { RefreshTokenResponse } from '@/types/responses/auth/IRefereshTokenResponse';
+import { REDUX_TAG_TYPES } from '@/redux/tags/tags';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type {
   BaseQueryFn,
@@ -60,6 +61,7 @@ const baseQueryWithReauth: BaseQueryFn<
 
 export const baseApi = createApi({
   reducerPath: 'api',
+  tagTypes: REDUX_TAG_TYPES,
   baseQuery: baseQueryWithReauth,
   endpoints: () => ({}),
 });

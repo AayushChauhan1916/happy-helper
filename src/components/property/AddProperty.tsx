@@ -17,14 +17,20 @@ export interface AddressFields {
   city: string;
   state: string;
   pincode: string;
+  country?: string;
 }
 
 interface Props {
   value: AddressFields;
   onChange: (v: AddressFields) => void;
+  errors?: Partial<Record<keyof AddressFields, string>>;
 }
 
-export default function PropertyAddressForm({ value, onChange }: Props) {
+export default function PropertyAddressForm({
+  value,
+  onChange,
+  errors,
+}: Props) {
   const [stateOpen, setStateOpen] = useState(false);
   const [stateSearch, setStateSearch] = useState('');
 
@@ -54,6 +60,11 @@ export default function PropertyAddressForm({ value, onChange }: Props) {
             placeholder="12A"
             className="h-10"
           />
+          <div className="h-4">
+            <p className="text-[11px] leading-4 text-destructive">
+              {errors?.houseNumber ?? ''}
+            </p>
+          </div>
         </div>
         <div className="space-y-1.5">
           <Label className="text-xs">Street *</Label>
@@ -63,6 +74,11 @@ export default function PropertyAddressForm({ value, onChange }: Props) {
             placeholder="MG Road"
             className="h-10"
           />
+          <div className="h-4">
+            <p className="text-[11px] leading-4 text-destructive">
+              {errors?.street ?? ''}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -74,6 +90,11 @@ export default function PropertyAddressForm({ value, onChange }: Props) {
           placeholder="Near City Mall"
           className="h-10"
         />
+        <div className="h-4">
+          <p className="text-[11px] leading-4 text-destructive">
+            {errors?.landmark ?? ''}
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -85,6 +106,11 @@ export default function PropertyAddressForm({ value, onChange }: Props) {
             placeholder="Bengaluru"
             className="h-10"
           />
+          <div className="h-4">
+            <p className="text-[11px] leading-4 text-destructive">
+              {errors?.city ?? ''}
+            </p>
+          </div>
         </div>
         <div className="space-y-1.5">
           <Label className="text-xs">Pincode *</Label>
@@ -97,6 +123,11 @@ export default function PropertyAddressForm({ value, onChange }: Props) {
             maxLength={6}
             className="h-10"
           />
+          <div className="h-4">
+            <p className="text-[11px] leading-4 text-destructive">
+              {errors?.pincode ?? ''}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -150,6 +181,11 @@ export default function PropertyAddressForm({ value, onChange }: Props) {
             </div>
           </PopoverContent>
         </Popover>
+        <div className="h-4">
+          <p className="text-[11px] leading-4 text-destructive">
+            {errors?.state ?? ''}
+          </p>
+        </div>
       </div>
     </div>
   );
