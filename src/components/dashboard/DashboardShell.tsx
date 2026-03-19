@@ -1,33 +1,27 @@
-import type { ReactNode } from 'react';
-import { Outlet } from 'react-router-dom';
-import DashboardSidebar, { type SidebarItem } from '@/components/dashboard/DashboardSidebar';
-import TopNavbar from '@/components/dashboard/TopNavbar';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/dashboard/AppSidebar";
+import { Outlet } from "react-router-dom";
+import { useState } from "react";
+import { CreateStayDialog } from "@/components/stay/CreateStayDialog";
 
-interface DashboardShellProps {
-  roleLabel: string;
-  items: SidebarItem[];
-  userName?: string;
-  userInitials?: string;
-  children?: ReactNode;
-}
+export function DashboardShell() {
+  const [createStayOpen, setCreateStayOpen] = useState(false);
 
-export default function DashboardShell({
-  roleLabel,
-  items,
-  userName,
-  userInitials,
-  children,
-}: DashboardShellProps) {
   return (
     <SidebarProvider>
-      <DashboardSidebar items={items} role={roleLabel} />
-      <SidebarInset className="bg-white">
-        <TopNavbar userName={userName} userInitials={userInitials} />
-        <section className="flex-1 bg-white p-4 lg:p-6">
-          <div className="min-h-full">{children ?? <Outlet />}</div>
-        </section>
-      </SidebarInset>
+      <div className="min-h-screen flex w-full">
+        <AppSidebar onCreateStay={() => setCreateStayOpen(true)} />
+        <div className="flex-1 flex flex-col">
+          <header className="h-14 flex items-center gap-4 border-b bg-background px-4">
+            <SidebarTrigger />
+            <h2 className="text-sm font-medium text-muted-foreground">PG Management</h2>
+          </header>
+          <main className="flex-1 overflow-auto p-6">
+            <Outlet />
+          </main>
+        </div>
+      </div>
+      <CreateStayDialog open={createStayOpen} onOpenChange={setCreateStayOpen} />
     </SidebarProvider>
   );
 }

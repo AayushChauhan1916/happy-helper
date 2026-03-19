@@ -1,45 +1,33 @@
-import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import {
-  bootstrapFinished,
-  bootstrapStarted,
-  clearUser,
-  setUser,
-} from '@/redux/features/auth/auth.slice';
-import { hasAccessToken } from '@/lib/auth';
-import { useMeQuery } from './redux/services/auth/auth.api';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { DashboardShell } from "@/components/dashboard/DashboardShell";
+import Index from "./pages/Index";
+import PropertyDetail from "./pages/PropertyDetail";
+import RoomDetail from "./pages/RoomDetail";
+import NotFound from "./pages/NotFound";
 
-function App() {
-  const dispatch = useDispatch();
-  const isLoggedIn = hasAccessToken();
-  const { data, isLoading, isFetching, isError } = useMeQuery(undefined, {
-    skip: !isLoggedIn,
-  });
+const queryClient = new QueryClient();
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      dispatch(clearUser());
-      dispatch(bootstrapFinished());
-      return;
-    }
-
-    if (isLoading || isFetching) {
-      dispatch(bootstrapStarted());
-      return;
-    }
-
-    if (isError || !data?.data) {
-      localStorage.removeItem('accessToken');
-      dispatch(clearUser());
-      return;
-    }
-
-    dispatch(setUser(data.data));
-    dispatch(bootstrapFinished());
-  }, [dispatch, isLoggedIn, isLoading, isFetching, isError, data]);
-
-  return <Outlet />;
-}
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route element={<DashboardShell />}>
+            <Route path="/" element={<Index />} />
+            <Route path="/properties/:propertyId" element={<PropertyDetail />} />
+            <Route path="/properties/:propertyId/rooms/:roomId" element={<RoomDetail />} />
+          </Route>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
 export default App;
